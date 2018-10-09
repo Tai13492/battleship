@@ -1,0 +1,7 @@
+const SEND_MESSAGE = "SEND_MESSAGE";
+const RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
+
+module.exports = {
+  SEND_MESSAGE,
+  RECEIVE_MESSAGE
+};
