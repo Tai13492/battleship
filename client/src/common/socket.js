@@ -3,24 +3,29 @@ import { observable, action, computed } from "mobx";
 
 class SocketStore {
   @observable
-  connectedToServer = false;
+  socket = null;
   @observable
-  socket = io('localhost:5000');
+  name = "";
 
   constructor() {
-    this.socket.on("handshake", (data) => console.log(data,'hello'));
+    if (this.socket !== null) {
+      this.socket.on("handshake", data => console.log(data));
+    }
   }
 
-//   @action.bound
-//   connectToServer() {
-//     console.log("connecting");
-//     setTimeout(() => {
-//       this.socket = io("localhost:5000");
-//       this.connectedToServer = true;
-//       console.log("connected");
-//       console.log(this.socket);
-//     }, 5000);
-//   }
+  @action.bound
+  initiateWebSocket() {
+    this.socket = io("localhost:5000");
+  }
+  @action.bound
+  setName(name) {
+    this.name = name;
+  }
+  @computed
+  get isNameEmpty() {
+    if (this.name.length === 0) return true;
+    return false;
+  }
 }
 
 export default new SocketStore();
