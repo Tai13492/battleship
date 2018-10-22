@@ -56,8 +56,9 @@ class NameSelection extends React.Component {
     console.log(this.props.socket);
   }
   onInputChange = e => this.props.socket.setName(e.target.value);
+
+  onSubmit = e => e.preventDefault();
   render() {
-    console.log(this.props.socket.name);
     const { classes } = this.props;
     return (
       <React.Fragment>
@@ -70,7 +71,7 @@ class NameSelection extends React.Component {
             <Typography component="h1" variant="h5">
               Enter your name to start
             </Typography>
-            <form className={classes.form}>
+            <form className={classes.form} onSubmit={this.onSubmit}>
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="text">Name</InputLabel>
                 <Input
@@ -103,6 +104,7 @@ class NameSelection extends React.Component {
                 color="primary"
                 className={classes.submit}
                 disabled={this.props.socket.isNameEmpty}
+                onClick={() => this.props.socket.sendMessage()}
               >
                 Start
               </Button>

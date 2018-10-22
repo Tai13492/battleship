@@ -11,11 +11,9 @@ let clients = [];
 io = socket(server);
 
 io.on("connection", socket => {
-  clients.push(client.id);
-  console.log(clients);
-  // console.log(socket.id);
-  io.emit('handshake', "Now, client and server is connected");
-  socket.on(constants.SEND_MESSAGE, data => {
-    io.emit(constants.RECEIVE_MESSAGE, data);
+  console.log(socket.id);
+  socket.on("SEND_MESSAGE", data => {
+    console.log(data);
+    io.emit("RECEIVE_MESSAGE", "gigi");
   });
 });
