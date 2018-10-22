@@ -52,8 +52,12 @@ import { inject, observer } from "mobx-react";
 @inject("socket")
 @observer
 class NameSelection extends React.Component {
+  componentDidMount() {
+    console.log(this.props.socket);
+  }
   onInputChange = e => this.props.socket.setName(e.target.value);
   render() {
+    console.log(this.props.socket.name);
     const { classes } = this.props;
     return (
       <React.Fragment>
