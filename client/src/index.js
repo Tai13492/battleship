@@ -5,22 +5,14 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { Provider } from "mobx-react";
 import socket from "./common/socket";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import battleship from "./battleship/store";
 
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true
-  }
-});
-
-const store = { socket };
+// const store = { socket, battleship };
 
 ReactDOM.render(
-  <Provider {...store}>
-    <MuiThemeProvider theme={theme}>
-      <App />
-    </MuiThemeProvider>
-  </Provider>,
+  // <Provider {...store}>
+  <App />,
+  // </Provider>,
   document.getElementById("root")
 );
 registerServiceWorker();
