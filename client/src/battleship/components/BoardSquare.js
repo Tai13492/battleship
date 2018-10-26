@@ -5,7 +5,8 @@ import Square from "./Square";
 
 const squareTarget = {
   drop(props) {
-    props.setCoord(props.x, props.y);
+    console.log(props);
+    props.setShips();
   }
 };
 

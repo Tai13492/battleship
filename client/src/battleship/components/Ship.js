@@ -5,7 +5,7 @@ import { DragSource } from "react-dnd";
 
 const shipSource = {
   beginDrag(props) {
-    return {};
+    props.setActiveShip();
   }
 };
 

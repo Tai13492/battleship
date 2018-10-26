@@ -6,14 +6,44 @@ import HTML5Backend from "react-dnd-html5-backend";
 
 @DragDropContext(HTML5Backend)
 class Board extends React.Component {
+  state = {
+    ships: [
+      { xCoord: 0, yCoord: 0, status: "FUNCTIONAL", key: 0 },
+      { xCoord: 1, yCoord: 0, status: "FUNCTIONAL", key: 1 },
+      { xCoord: 2, yCoord: 0, status: "FUNCTIONAL", key: 2 },
+      { xCoord: 3, yCoord: 0, status: "FUNCTIONAL", key: 3 },
+      { xCoord: 0, yCoord: 1, status: "FUNCTIONAL", key: 4 },
+      { xCoord: 1, yCoord: 1, status: "FUNCTIONAL", key: 5 },
+      { xCoord: 2, yCoord: 1, status: "FUNCTIONAL", key: 6 },
+      { xCoord: 3, yCoord: 1, status: "FUNCTIONAL", key: 7 },
+      { xCoord: 0, yCoord: 2, status: "FUNCTIONAL", key: 8 },
+      { xCoord: 1, yCoord: 2, status: "FUNCTIONAL", key: 9 },
+      { xCoord: 2, yCoord: 2, status: "FUNCTIONAL", key: 10 },
+      { xCoord: 3, yCoord: 2, status: "FUNCTIONAL", key: 11 },
+      { xCoord: 0, yCoord: 3, status: "FUNCTIONAL", key: 12 },
+      { xCoord: 1, yCoord: 3, status: "FUNCTIONAL", key: 13 },
+      { xCoord: 2, yCoord: 3, status: "FUNCTIONAL", key: 14 },
+      { xCoord: 3, yCoord: 3, status: "FUNCTIONAL", key: 15 }
+    ],
+    activeShip: {}
+  };
+
+  setShips = ship => {
+    let shipsClone = [...this.state.ships];
+    shipsClone[ship.key] = ship;
+    this.setState({ ships: shipsClone });
+  };
+
+  setActiveShip = ship => {
+    this.setState({ activeShip: ship });
+  };
+
   renderSquare = i => {
-    const { coord, setCoord } = this.props;
-    const [xCoord, yCoord] = coord;
     const x = i % 8;
     const y = Math.floor(i / 8);
     return (
       <div key={`${i} square`} style={{ width: "12.5%", height: "12.5%" }}>
-        <BoardSquare setCoord={setCoord} x={x} y={y}>
+        <BoardSquare setShips={() => this.setShips(this.state.activeShip)}>
           {this.renderPiece(x, y)}
         </BoardSquare>
       </div>
@@ -26,12 +56,14 @@ class Board extends React.Component {
     });
   };
   renderPiece = (x, y) => {
-    const { coord } = this.props;
-    const [xCoord, yCoord] = coord;
-    if (xCoord === x && yCoord === y) {
-      return <Ship />;
-    }
-    return "";
+    const { ships } = this.state;
+    const index = ships.findIndex(
+      ship => ship.xCoord === x && ship.yCoord === y
+    );
+    if (index === -1) return "";
+    return (
+      <Ship setActiveShip={() => this.setActiveShip(this.state.ships[index])} />
+    );
   };
   render() {
     return (
