@@ -28,9 +28,9 @@ class Board extends React.Component {
     activeShip: {}
   };
 
-  setShips = ship => {
+  setShips = (ship, x, y) => {
     let shipsClone = [...this.state.ships];
-    shipsClone[ship.key] = ship;
+    shipsClone[ship.key] = { ...ship, xCoord: x, yCoord: y };
     this.setState({ ships: shipsClone });
   };
 
@@ -43,9 +43,12 @@ class Board extends React.Component {
     const y = Math.floor(i / 8);
     return (
       <div key={`${i} square`} style={{ width: "12.5%", height: "12.5%" }}>
-        <BoardSquare setShips={() => this.setShips(this.state.activeShip)}>
-          {this.renderPiece(x, y)}
-        </BoardSquare>
+        {this.renderPiece(x, y)}
+        {/* <BoardSquare
+          setShips={() => this.setShips(this.state.activeShip, x, y)}
+        >
+          
+        </BoardSquare> */}
       </div>
     );
   };
@@ -60,9 +63,18 @@ class Board extends React.Component {
     const index = ships.findIndex(
       ship => ship.xCoord === x && ship.yCoord === y
     );
-    if (index === -1) return "";
+    if (index === -1)
+      return (
+        <BoardSquare
+          setShips={() => this.setShips(this.state.activeShip, x, y)}
+        />
+      );
     return (
-      <Ship setActiveShip={() => this.setActiveShip(this.state.ships[index])} />
+      <BoardSquare>
+        <Ship
+          setActiveShip={() => this.setActiveShip(this.state.ships[index])}
+        />
+      </BoardSquare>
     );
   };
   render() {
