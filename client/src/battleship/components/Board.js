@@ -8,34 +8,51 @@ import HTML5Backend from "react-dnd-html5-backend";
 class Board extends React.Component {
   state = {
     ships: [
-      { xCoord: 0, yCoord: 0, status: "FUNCTIONAL", key: 0 },
-      { xCoord: 1, yCoord: 0, status: "FUNCTIONAL", key: 1 },
-      { xCoord: 2, yCoord: 0, status: "FUNCTIONAL", key: 2 },
-      { xCoord: 3, yCoord: 0, status: "FUNCTIONAL", key: 3 },
-      { xCoord: 0, yCoord: 1, status: "FUNCTIONAL", key: 4 },
-      { xCoord: 1, yCoord: 1, status: "FUNCTIONAL", key: 5 },
-      { xCoord: 2, yCoord: 1, status: "FUNCTIONAL", key: 6 },
-      { xCoord: 3, yCoord: 1, status: "FUNCTIONAL", key: 7 },
-      { xCoord: 0, yCoord: 2, status: "FUNCTIONAL", key: 8 },
-      { xCoord: 1, yCoord: 2, status: "FUNCTIONAL", key: 9 },
-      { xCoord: 2, yCoord: 2, status: "FUNCTIONAL", key: 10 },
-      { xCoord: 3, yCoord: 2, status: "FUNCTIONAL", key: 11 },
-      { xCoord: 0, yCoord: 3, status: "FUNCTIONAL", key: 12 },
-      { xCoord: 1, yCoord: 3, status: "FUNCTIONAL", key: 13 },
-      { xCoord: 2, yCoord: 3, status: "FUNCTIONAL", key: 14 },
-      { xCoord: 3, yCoord: 3, status: "FUNCTIONAL", key: 15 }
+      { xCoord: 0, yCoord: 0, status: "FUNCTIONAL", key: 0, num: 1 },
+      { xCoord: 1, yCoord: 0, status: "FUNCTIONAL", key: 1, num: 1 },
+      { xCoord: 2, yCoord: 0, status: "FUNCTIONAL", key: 2, num: 1 },
+      { xCoord: 3, yCoord: 0, status: "FUNCTIONAL", key: 3, num: 1 },
+      { xCoord: 0, yCoord: 1, status: "FUNCTIONAL", key: 4, num: 2 },
+      { xCoord: 1, yCoord: 1, status: "FUNCTIONAL", key: 5, num: 2 },
+      { xCoord: 2, yCoord: 1, status: "FUNCTIONAL", key: 6, num: 2 },
+      { xCoord: 3, yCoord: 1, status: "FUNCTIONAL", key: 7, num: 2 },
+      { xCoord: 0, yCoord: 2, status: "FUNCTIONAL", key: 8, num: 3 },
+      { xCoord: 1, yCoord: 2, status: "FUNCTIONAL", key: 9, num: 3 },
+      { xCoord: 2, yCoord: 2, status: "FUNCTIONAL", key: 10, num: 3 },
+      { xCoord: 3, yCoord: 2, status: "FUNCTIONAL", key: 11, num: 3 },
+      { xCoord: 0, yCoord: 3, status: "FUNCTIONAL", key: 12, num: 4 },
+      { xCoord: 1, yCoord: 3, status: "FUNCTIONAL", key: 13, num: 4 },
+      { xCoord: 2, yCoord: 3, status: "FUNCTIONAL", key: 14, num: 4 },
+      { xCoord: 3, yCoord: 3, status: "FUNCTIONAL", key: 15, num: 4 }
     ],
     activeShip: {}
   };
 
-  setShips = (ship, x, y) => {
+  setShips = (x, y) => {
+    const { xCoord, yCoord, num } = this.state.activeShip;
+    const diffX = x - xCoord;
+    const diffY = y - yCoord;
     let shipsClone = [...this.state.ships];
-    shipsClone[ship.key] = { ...ship, xCoord: x, yCoord: y };
-    this.setState({ ships: shipsClone });
+    shipsClone = shipsClone.map(shipClone => {
+      const { xCoord, yCoord } = shipClone;
+      if (shipClone.num === num) {
+        return { ...shipClone, xCoord: xCoord + diffX, yCoord: yCoord + diffY };
+      }
+      return { ...shipClone };
+    });
+    this.setState({
+      ships: shipsClone
+    });
+    // shipsClone[ship.key] = { ...ship, xCoord: x, yCoord: y };
+    // this.setState({ ships: shipsClone });
   };
 
   setActiveShip = ship => {
     this.setState({ activeShip: ship });
+  };
+
+  clearActiveShip = () => {
+    this.setState({ activeShip: {} });
   };
 
   renderSquare = i => {
@@ -44,11 +61,6 @@ class Board extends React.Component {
     return (
       <div key={`${i} square`} style={{ width: "12.5%", height: "12.5%" }}>
         {this.renderPiece(x, y)}
-        {/* <BoardSquare
-          setShips={() => this.setShips(this.state.activeShip, x, y)}
-        >
-          
-        </BoardSquare> */}
       </div>
     );
   };
@@ -64,18 +76,20 @@ class Board extends React.Component {
       ship => ship.xCoord === x && ship.yCoord === y
     );
     if (index === -1)
+      return <BoardSquare setShips={() => this.setShips(x, y)} />;
+    else {
+      const { num } = ships[index];
       return (
-        <BoardSquare
-          setShips={() => this.setShips(this.state.activeShip, x, y)}
-        />
+        <BoardSquare>
+          <Ship
+            setActiveShip={() => this.setActiveShip(this.state.ships[index])}
+            num={num}
+            activeShip={this.state.activeShip}
+            clearActiveShip={this.clearActiveShip}
+          />
+        </BoardSquare>
       );
-    return (
-      <BoardSquare>
-        <Ship
-          setActiveShip={() => this.setActiveShip(this.state.ships[index])}
-        />
-      </BoardSquare>
-    );
+    }
   };
   render() {
     return (

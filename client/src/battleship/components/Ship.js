@@ -7,7 +7,14 @@ const shipSource = {
   beginDrag(props) {
     props.setActiveShip();
     return {};
+  },
+  endDrag(props) {
+    props.clearActiveShip();
   }
+  // isDragging(props) {
+  //   const { num, activeShip } = props;
+  //   return num === activeShip.num;
+  // }
 };
 
 const collect = (connect, monitor) => {
@@ -20,19 +27,21 @@ const collect = (connect, monitor) => {
 @DragSource(ItemTypes.SHIP, shipSource, collect)
 class Ship extends React.Component {
   render() {
-    const { connectDragSource, isDragging } = this.props;
+    const { connectDragSource, isDragging, num, activeShip } = this.props;
+    const isDraggingShip = num === (activeShip && activeShip.num);
+    console.log(isDraggingShip);
     return connectDragSource(
       <div
         style={{
-          opacity: isDragging ? 0.5 : 1,
+          opacity: isDragging || isDraggingShip ? 0.5 : 1,
           fontSize: 25,
           fontWeight: "bold",
           cursor: "move",
-          color: "black"
+          backgroundColor: "blue",
+          width: "100%",
+          height: "100%"
         }}
-      >
-        ♘
-      </div>
+      />
     );
   }
 }
