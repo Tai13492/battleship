@@ -1,20 +1,22 @@
-import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Board from "../battleship/components/Board";
-
-const Mock = () => <h1> hello world </h1>;
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Loading from '../welcome/Loading';
+import Board from '../battleship/components/Board';
+import Welcome from '../welcome';
 
 class Router extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Board} />
-          {/* <Route exact path="/game" component={Battleship} /> */}
-        </Switch>
-      </BrowserRouter>
-    );
-  }
+	render() {
+		return (
+			<BrowserRouter>
+				<Switch>
+					<Route exact path="/" component={Welcome} />
+					<Route exact path="/loading" component={Loading} />
+					<Route exact path="/board" component={Board} />
+					{/* <Route exact path="/game" component={Battleship} /> */}
+				</Switch>
+			</BrowserRouter>
+		);
+	}
 }
 
 export default Router;

@@ -2,6 +2,7 @@ import React from "react";
 
 import { ItemTypes } from "../constants";
 import { DragSource } from "react-dnd";
+import { inject, observer } from "mobx-react";
 
 const shipSource = {
   beginDrag(props) {
@@ -24,12 +25,13 @@ const collect = (connect, monitor) => {
   };
 };
 
+@inject("battleship")
+@observer
 @DragSource(ItemTypes.SHIP, shipSource, collect)
 class Ship extends React.Component {
   render() {
     const { connectDragSource, isDragging, num, activeShip } = this.props;
     const isDraggingShip = num === (activeShip && activeShip.num);
-    console.log(isDraggingShip);
     return connectDragSource(
       <div
         style={{

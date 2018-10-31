@@ -2,6 +2,7 @@ import React from "react";
 import { ItemTypes } from "../constants";
 import { DropTarget } from "react-dnd";
 import Square from "./Square";
+import { inject, observer } from "mobx-react";
 
 const squareTarget = {
   drop(props) {
@@ -19,6 +20,8 @@ const collect = (connect, monitor) => {
   };
 };
 
+@inject("battleship")
+@observer
 @DropTarget(ItemTypes.SHIP, squareTarget, collect)
 class BoardSquare extends React.Component {
   render() {
