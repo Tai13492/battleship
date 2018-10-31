@@ -46,11 +46,17 @@ class BattleShipStore {
 		console.log('place ship is calleddd');
 		const { shipOrder, orientation } = this.activeButton;
 		if (shipOrder === '') return;
-		this.squares[x][y].ship = { ...ship, shipOrder: shipOrder };
-		console.log(this.squares);
-		// this.squares[x + 1][y].ship = { ...ship, shipOrder: shipOrder };
-		// this.squares[x + 2][y].ship = { ...ship, shipOrder: shipOrder };
-		// this.squares[x + 3][y].ship = { ...ship, shipOrder: shipOrder };
+		if (orientation === 'HORIZONTAL') {
+			if (this.squares[x][y + 3] === undefined) return;
+			for (let i = 0; i < 4; i++) {
+				this.squares[x][y + i].ship = { ...ship, shipOrder: shipOrder };
+			}
+		} else {
+			if (this.squares[x + 3] === undefined) return;
+			for (let i = 0; i < 4; i++) {
+				this.squares[x + i][y].ship = { ...ship, shipOrder: shipOrder };
+			}
+		}
 	}
 
 	@action.bound

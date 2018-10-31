@@ -19,7 +19,9 @@ class BoardSquare extends React.Component {
 					}}
 					className="clickable"
 					onClick={() => {
-						this.props.placeShip();
+						this.props.isEmpty
+							? this.props.placeShip()
+							: console.log('this slot is fulled!');
 					}}
 				>
 					{this.props.children}
