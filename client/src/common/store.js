@@ -1,10 +1,10 @@
 import { observable, action } from 'mobx';
 import io from 'socket.io-client';
 
-const square = { key: 0, ship: null };
+const square = { key: 0, ship: null, isHit: false };
 const ship = {
-	key: '',
-	status: 'FUNCTIONAL'
+	status: 'FUNCTIONAL',
+	shipOrder: ''
 };
 
 class BattleShipStore {
@@ -20,12 +20,39 @@ class BattleShipStore {
 	activeShip = {};
 	@observable
 	roomName = '';
+	@observable
+	activeButton = {
+		shipOrder: '',
+		orientation: 'HORIZONTAL'
+	};
 	constructor() {
 		if (this.socket !== null) {
 			this.socket.on('SOCKET', id => console.log(id));
 			this.socket.on('GREETINGS_FROM_OPPONENT', msg => console.log(msg));
 		}
 	}
+
+	@action.bound
+	setActiveButton(shipOrder, orientation) {
+		console.log('i am called');
+		this.activeButton = {
+			shipOrder,
+			orientation
+		};
+	}
+
+	@action.bound
+	placeShip(x, y) {
+		console.log('place ship is calleddd');
+		const { shipOrder, orientation } = this.activeButton;
+		if (shipOrder === '') return;
+		this.squares[x][y].ship = { ...ship, shipOrder: shipOrder };
+		console.log(this.squares);
+		// this.squares[x + 1][y].ship = { ...ship, shipOrder: shipOrder };
+		// this.squares[x + 2][y].ship = { ...ship, shipOrder: shipOrder };
+		// this.squares[x + 3][y].ship = { ...ship, shipOrder: shipOrder };
+	}
+
 	@action.bound
 	setName(name) {
 		this.name = name;

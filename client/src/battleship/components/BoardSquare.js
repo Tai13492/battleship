@@ -10,10 +10,36 @@ class BoardSquare extends React.Component {
 			<div
 				style={{ position: 'relative', width: '100%', height: '100%' }}
 			>
-				<Square> {this.props.children}</Square>
+				<div
+					style={{
+						width: '100%',
+						height: '100%',
+						border: '2px solid white',
+						backgroundColor: !this.props.isEmpty ? 'green' : ''
+					}}
+					className="clickable"
+					onClick={() => {
+						this.props.placeShip();
+					}}
+				>
+					{this.props.children}
+				</div>
 			</div>
 		);
 	}
 }
 
 export default BoardSquare;
+
+/*
+<div
+		style={{
+			width: '100%',
+			height: '100%',
+			border: '2px solid white'
+		}}
+		className="clickable"
+	>
+		{children}
+	</div>
+*/
