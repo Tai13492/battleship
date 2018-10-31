@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import background from '../common/assets/first_page_bg.jpeg';
+import { inject, observer } from 'mobx-react';
+
+
 class Welcome extends Component {
 	render() {
 		const { push } = this.props.history;
