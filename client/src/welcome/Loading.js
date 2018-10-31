@@ -1,8 +1,13 @@
 import React from 'react';
 import loadingBackground from '../common/assets/loading_screen.jpeg';
+import { inject, observer } from 'mobx-react';
 
+@inject('battleship')
+@observer
 class Loading extends React.Component {
 	componentDidMount() {
+		const { joinRoom } = this.props.battleship;
+		joinRoom();
 		this.interval = setInterval(() => {
 			const progress = Math.floor(Math.random() * 20);
 			this.setState(prevState => ({
@@ -14,7 +19,7 @@ class Loading extends React.Component {
 		if (prevState.loadingValue > 100) {
 			const { push } = this.props.history;
 			clearInterval(this.interval);
-			push('/board');
+			push('/lobby');
 		}
 	}
 	state = {

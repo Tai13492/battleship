@@ -6,6 +6,10 @@ import background from '../common/assets/game_bg.jpeg';
 @inject('battleship')
 @observer
 class Board extends React.Component {
+	componentDidMount() {
+		const { sendMyName } = this.props.battleship;
+		sendMyName();
+	}
 	renderBoard = () => {
 		const { squares } = this.props.battleship;
 		return squares.map((square, x) =>

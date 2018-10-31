@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import background from '../common/assets/first_page_bg.jpeg';
 import { inject, observer } from 'mobx-react';
 
-
+@inject('battleship')
+@observer
 class Welcome extends Component {
 	render() {
 		const { push } = this.props.history;
+		const { name, setName, sendNameToServer } = this.props.battleship;
 		return (
 			<div
 				style={{
@@ -27,6 +29,9 @@ class Welcome extends Component {
 										type="text"
 										className="input is-large"
 										placeholder="Enter Your Name"
+										value={name}
+										required={true}
+										onChange={e => setName(e.target.value)}
 									/>
 								</div>
 							</div>
@@ -34,7 +39,10 @@ class Welcome extends Component {
 								<button
 									className="button is-large"
 									style={{ width: '100%', marginTop: 24 }}
-									onClick={() => push('/loading')}
+									onClick={() => {
+										sendNameToServer();
+										push('/loading');
+									}}
 								>
 									<strong> START </strong>
 								</button>

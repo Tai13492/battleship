@@ -6,21 +6,30 @@ const app = express();
 
 server = app.listen(5000, () => console.log("server is running on port 5000"));
 
-// let clients = [];
+let clients = [];
 
 io = socket(server);
 
 io.on("connection", socket => {
   console.log(socket.id, "from connection");
-  io.emit("SOCKET", socket.id);
-  socket.on("JOIN_ROOM", id => {
-    socket.join(id);
-    console.log(getRoomId(socket), "from rooms");
+  socket.emit("SOCKET", socket.id);
+  socket.on("SET_NAME", name => {
+    const isNameUsed = !!clients.find(client => client.name === name);
+    if (isNameUsed) socket.emit("NAME_ERROR", "This name is already used!");
+    else clients.push({ name, id: socket.id });
+  });
+  socket.on("JOIN_ROOM", name => {
+    if (getRoomName(socket)) socket.leave(getRoomName(socket));
+    socket.join(name);
+    console.log(getRoomName(socket), "from rooms");
+  });
+  socket.on("GREETINGS", msg => {
+    socket.to(getRoomName(socket)).emit("GREETINGS_FROM_OPPONENT", msg);
   });
 
-  socket.on("SECRET", () => {
-    io.emit("SEND_SECRET", socket.secret);
-  });
+  // socket.on("SECRET", () => {
+  //   io.emit("SEND_SECRET", socket.secret);
+  // });
 });
 
-const getRoomId = socket => Object.keys(socket.rooms)[0];
+const getRoomName = socket => Object.values(socket.rooms)[0];

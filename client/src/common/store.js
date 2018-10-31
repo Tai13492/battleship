@@ -1,30 +1,51 @@
-import { observable, action } from "mobx";
-import io from "socket.io-client";
+import { observable, action } from 'mobx';
+import io from 'socket.io-client';
 
 const square = { key: 0, ship: null };
 const ship = {
-  key: "",
-  status: "FUNCTIONAL"
+	key: '',
+	status: 'FUNCTIONAL'
 };
 
 class BattleShipStore {
-  @observable
-  socket = null;
-  @observable
-  squares = Array(8).fill(Array(8).fill(square, 0, 8), 0, 8);
-  @observable
-  activeShip = {};
-  constructor() {
-    if (this.socket !== null) {
-      this.socket.on("room", data => console.log(data));
-    }
-  }
+	@observable
+	socket = io('localhost:5000') || null;
+	@observable
+	name = '';
+	@observable
+	socketId = '';
+	@observable
+	squares = Array(8).fill(Array(8).fill(square, 0, 8), 0, 8);
+	@observable
+	activeShip = {};
+	@observable
+	roomName = '';
+	constructor() {
+		if (this.socket !== null) {
+			this.socket.on('SOCKET', id => console.log(id));
+			this.socket.on('GREETINGS_FROM_OPPONENT', msg => console.log(msg));
+		}
+	}
+	@action.bound
+	setName(name) {
+		this.name = name;
+	}
 
-  @action.bound
-  createConnection(id) {
-    console.log(id, "from action");
-    this.socket = io(`localhost:5000/${id}`);
-  }
+	@action.bound
+	sendNameToServer() {
+		this.socket.emit('SET_NAME', this.name);
+	}
+
+	@action.bound
+	joinRoom(name = this.name) {
+		this.socket.emit('JOIN_ROOM', name);
+		this.roomName = name;
+	}
+
+	@action.bound
+	sendMyName() {
+		this.socket.emit('GREETINGS', `${this.name} sends his regards!`);
+	}
 }
 
 export default new BattleShipStore();

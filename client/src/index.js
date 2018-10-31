@@ -5,8 +5,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'mobx-react';
-import socket from './common/socket';
-import battleship from './battleship/store';
+import battleship from './common/store';
 
 const store = { battleship };
 // const store = { socket, battleship };
