@@ -1,6 +1,5 @@
 import React from 'react';
 import loadingBackground from '../common/assets/loading_screen.jpeg';
-import { withRouter } from 'react-router-dom';
 
 class Loading extends React.Component {
 	componentDidMount() {

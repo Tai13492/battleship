@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import background from '../common/assets/first_page_bg.jpeg';
-import { withRouter } from 'react-router-dom';
 class Welcome extends Component {
 	render() {
 		const { push } = this.props.history;

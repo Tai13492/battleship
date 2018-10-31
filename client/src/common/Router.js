@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Loading from '../welcome/Loading';
-import Board from '../battleship/components/Board';
+import Board from '../battleship';
 import Welcome from '../welcome';
 
 class Router extends Component {
