@@ -15,7 +15,7 @@ class BoardSquare extends React.Component {
 						width: '100%',
 						height: '100%',
 						border: '2px solid white',
-						backgroundColor: !this.props.isEmpty ? 'green' : ''
+						backgroundColor: !this.props.isEmpty ? 'blue' : ''
 					}}
 					className="clickable"
 					onClick={() => {

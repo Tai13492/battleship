@@ -23,8 +23,15 @@ class BattleShipStore {
 	@observable
 	activeButton = {
 		shipOrder: '',
-		orientation: 'HORIZONTAL'
+		orientation: ''
 	};
+	@observable
+	docks = [
+		{ shipOrder: 1, status: 'WAITING' },
+		{ shipOrder: 2, status: 'WAITING' },
+		{ shipOrder: 3, status: 'WAITING' },
+		{ shipOrder: 4, status: 'WAITING' }
+	];
 	constructor() {
 		if (this.socket !== null) {
 			this.socket.on('SOCKET', id => console.log(id));
@@ -34,7 +41,6 @@ class BattleShipStore {
 
 	@action.bound
 	setActiveButton(shipOrder, orientation) {
-		console.log('i am called');
 		this.activeButton = {
 			shipOrder,
 			orientation
@@ -43,7 +49,6 @@ class BattleShipStore {
 
 	@action.bound
 	placeShip(x, y) {
-		console.log('place ship is calleddd');
 		const { shipOrder, orientation } = this.activeButton;
 		if (shipOrder === '') return;
 		if (orientation === 'HORIZONTAL') {
@@ -57,6 +62,25 @@ class BattleShipStore {
 				this.squares[x + i][y].ship = { ...ship, shipOrder: shipOrder };
 			}
 		}
+		this.activeButton = {
+			shipOrder: '',
+			orientation: ''
+		};
+		this.docks[shipOrder - 1].status = 'DEPLOYED';
+	}
+
+	@action.bound
+	resetShip(shipOrder) {
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				if (
+					this.squares[i][j].ship &&
+					this.squares[i][j].ship.shipOrder === shipOrder
+				)
+					this.squares[i][j].ship = null;
+			}
+		}
+		this.docks[shipOrder - 1].status = 'WAITING';
 	}
 
 	@action.bound
@@ -82,88 +106,3 @@ class BattleShipStore {
 }
 
 export default new BattleShipStore();
-
-/*
- @action.bound
-  setShips(x, y) {
-    const { xCoord, yCoord, num } = this.activeShip;
-    const diffX = x - xCoord;
-    const diffY = y - yCoord;
-    let shipsClone = [...this.ships];
-    shipsClone = shipsClone.map(shipClone => {
-      const { xCoord, yCoord } = shipClone;
-      if (shipClone.num === num) {
-        return { ...shipClone, xCoord: xCoord + diffX, yCoord: yCoord + diffY };
-      }
-      return { ...shipClone };
-    });
-    this.ships = shipsClone;
-    console.log("done");
-    console.log(this.ships);
-  }
-
-  @action.bound
-  setActiveShip(ship) {
-    this.activeShip = ship;
-  }
-
-  @action.bound
-  clearActiveShip() {
-    this.activeShip = {};
-  }
-*/
-
-/*
-//import io from "socket.io-client";
-//import { observable, action, computed } from "mobx";
-// import BattleShip from "../battleship/store";
-
-// class SocketStore {
-//   @observable
-//   socket = io("localhost:5000") || null;
-//   @observable
-//   name = "";
-//   @observable
-//   socketId = "";
-
-//   constructor() {
-//     if (this.socket !== null) {
-//       this.socket.on("SOCKET", socketId => {
-//         this.socketId = socketId;
-//         console.log(socketId);
-//       });
-//       this.socket.on("SEND_SECRET", secret => console.log(secret));
-//     }
-//   }
-//   @action.bound
-//   setName(name) {
-//     this.name = name;
-//   }
-//   @computed
-//   get isNameEmpty() {
-//     if (this.name.length === 0) return true;
-//     return false;
-//   }
-//   sendMessage() {
-//     console.log("hello world");
-//     this.socket.emit("SEND_MESSAGE", "hello eiei");
-//   }
-//   joinRoom() {
-//     console.log(this.socketId, "JOINING");
-//     this.socket.emit("JOIN_ROOM", this.socketId);
-//   }
-
-//   askForSecret() {
-//     this.socket.emit("SECRET");
-//   }
-
-//   sendMockToServer() {
-//     this.socket.emit("FROM_CLIENT", {
-//       name: "Tai",
-//       age: 20
-//     });
-//   }
-// }
-
-// export default new SocketStore();
-*/

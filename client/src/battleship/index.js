@@ -15,20 +15,17 @@ class Board extends React.Component {
 		const { squares, placeShip } = this.props.battleship;
 		console.log('I AM CALLED');
 		return squares.map((square, x) =>
-			square.map(
-				(s, y) =>
-					console.log(squares[x][y].ship === null) || (
-						<div
-							key={'' + x + y}
-							style={{ width: '12.5%', height: '12.5%' }}
-						>
-							<BoardSquare
-								placeShip={() => placeShip(x, y)}
-								isEmpty={squares[x][y].ship === null}
-							/>
-						</div>
-					)
-			)
+			square.map((s, y) => (
+				<div
+					key={'' + x + y}
+					style={{ width: '12.5%', height: '12.5%' }}
+				>
+					<BoardSquare
+						placeShip={() => placeShip(x, y)}
+						isEmpty={squares[x][y].ship === null}
+					/>
+				</div>
+			))
 		);
 	};
 
