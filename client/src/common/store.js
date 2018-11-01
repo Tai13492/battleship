@@ -4,7 +4,9 @@ import io from 'socket.io-client';
 const square = { key: 0, ship: null, isHit: false };
 const ship = {
 	status: 'FUNCTIONAL',
-	shipOrder: ''
+	shipOrder: '',
+	shipPart: '',
+	orientation: ''
 };
 
 class BattleShipStore {
@@ -54,12 +56,22 @@ class BattleShipStore {
 		if (orientation === 'HORIZONTAL') {
 			if (this.squares[x][y + 3] === undefined) return;
 			for (let i = 0; i < 4; i++) {
-				this.squares[x][y + i].ship = { ...ship, shipOrder: shipOrder };
+				this.squares[x][y + i].ship = {
+					...ship,
+					shipOrder: shipOrder,
+					shipPart: i + 1,
+					orientation: 'HORIZONTAL'
+				};
 			}
 		} else {
 			if (this.squares[x + 3] === undefined) return;
 			for (let i = 0; i < 4; i++) {
-				this.squares[x + i][y].ship = { ...ship, shipOrder: shipOrder };
+				this.squares[x + i][y].ship = {
+					...ship,
+					shipOrder: shipOrder,
+					shipPart: i + 1,
+					orientation: 'VERTICAL'
+				};
 			}
 		}
 		this.activeButton = {
