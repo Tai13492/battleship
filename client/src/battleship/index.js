@@ -20,7 +20,6 @@ class Board extends React.Component {
 						<BoardSquare
 							onClick={() => placeShip(x, y)}
 							isEmpty={isEmpty}
-							isTarget={false}
 						>
 							{!isEmpty && (
 								<img

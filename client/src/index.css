@@ -6,6 +6,7 @@ body {
 
 .clickable {
 	background-color: #a9a9a9;
+	opacity: 0.6;
 }
 
 .clickable:hover {

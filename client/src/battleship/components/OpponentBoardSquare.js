@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 @observer
 class BoardSquare extends React.Component {
 	render() {
-		const { onClick, isEmpty, isTarget } = this.props;
+		const { onClick ,isTarget } = this.props;
 		return (
 			<div
 				style={{ position: 'relative', width: '100%', height: '100%' }}
@@ -18,7 +18,7 @@ class BoardSquare extends React.Component {
 					}}
 					className="clickable"
 					onClick={() => {
-						isEmpty
+						isTarget
 							? onClick()
 							: console.log('this slot is fulled!');
 					}}
