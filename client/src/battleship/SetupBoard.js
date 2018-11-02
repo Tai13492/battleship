@@ -96,6 +96,33 @@ class SetupBoard extends React.Component {
 				</div>
 			);
 	};
+	renderReadyButton = () => {
+		const { docks } = this.props.battleship;
+		if (
+			docks[0].status === 'DEPLOYED' &&
+			docks[1].status === 'DEPLOYED' &&
+			docks[2].status === 'DEPLOYED' &&
+			docks[3].status === 'DEPLOYED'
+		) {
+			return (
+				<div
+					style={{
+						display: 'flex',
+						height: '60%',
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}
+				>
+					<button
+						className="button is-large"
+						style={{ width: '100%' }}
+					>
+						<strong> READY ! </strong>
+					</button>
+				</div>
+			);
+		}
+	};
 	render() {
 		return (
 			<div
@@ -110,6 +137,7 @@ class SetupBoard extends React.Component {
 				<h1 className="title is-2"> PLACE YOUR SHIP </h1>
 				{this.renderForm()}
 				{this.renderShip()}
+				{this.renderReadyButton()}
 			</div>
 		);
 	}

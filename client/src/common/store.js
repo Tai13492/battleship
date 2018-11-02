@@ -1,6 +1,23 @@
 import { observable, action } from 'mobx';
 import io from 'socket.io-client';
 
+import body_ship_2_vertical from '../battleship/assets/body_ship_2_vertical.png';
+import body_ship_2 from '../battleship/assets/body_ship_2.png';
+import body_ship_vertical from '../battleship/assets/body_ship_vertical.png';
+import body_ship from '../battleship/assets/body_ship.png';
+import headship_vertical from '../battleship/assets/headship_vertical.png';
+import headship from '../battleship/assets/tailship.png';
+import tailship_vertical from '../battleship/assets/tailship_vertical.png';
+import tailship from '../battleship/assets/headship.png';
+
+const horizontalShip = [headship, body_ship, body_ship_2, tailship];
+const verticalShip = [
+	headship_vertical,
+	body_ship_vertical,
+	body_ship_2_vertical,
+	tailship_vertical
+];
+
 const square = { key: 0, ship: null, isHit: false };
 const ship = {
 	status: 'FUNCTIONAL',
@@ -64,7 +81,7 @@ class BattleShipStore {
 				this.squares[x][y + i].ship = {
 					...ship,
 					shipOrder: shipOrder,
-					shipPart: i + 1,
+					shipPart: horizontalShip[i],
 					orientation: 'HORIZONTAL'
 				};
 			}
@@ -74,7 +91,7 @@ class BattleShipStore {
 				this.squares[x + i][y].ship = {
 					...ship,
 					shipOrder: shipOrder,
-					shipPart: i + 1,
+					shipPart: verticalShip[i],
 					orientation: 'VERTICAL'
 				};
 			}

@@ -1,11 +1,11 @@
 import React from 'react';
-import Square from './Square';
 import { inject, observer } from 'mobx-react';
 
 @inject('battleship')
 @observer
 class BoardSquare extends React.Component {
 	render() {
+		const { onClick, isEmpty, isTarget } = this.props;
 		return (
 			<div
 				style={{ position: 'relative', width: '100%', height: '100%' }}
@@ -14,13 +14,12 @@ class BoardSquare extends React.Component {
 					style={{
 						width: '100%',
 						height: '100%',
-						border: '2px solid white',
-						backgroundColor: !this.props.isEmpty ? 'blue' : ''
+						border: '2px solid white'
 					}}
 					className="clickable"
 					onClick={() => {
-						this.props.isEmpty
-							? this.props.placeShip()
+						isEmpty || isTarget
+							? onClick()
 							: console.log('this slot is fulled!');
 					}}
 				>
@@ -32,16 +31,3 @@ class BoardSquare extends React.Component {
 }
 
 export default BoardSquare;
-
-/*
-<div
-		style={{
-			width: '100%',
-			height: '100%',
-			border: '2px solid white'
-		}}
-		className="clickable"
-	>
-		{children}
-	</div>
-*/
