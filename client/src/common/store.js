@@ -116,13 +116,13 @@ class BattleShipStore {
 
 	@action.bound
 	joinRoom(name = this.name) {
-		this.socket.emit('JOIN_ROOM', name);
+		this.socket.emit('JOIN_ROOM', name, this.name);
 		this.roomName = name;
 	}
-	@action.bound
-	joinedOtherRoom() {
-		this.socket.emit('JOINED_OTHER_ROOM', this.name);
-	}
+	// @action.bound
+	// joinedOtherRoom() {
+	// 	this.socket.emit('JOINED_OTHER_ROOM', this.name);
+	// }
 }
 
 export default new BattleShipStore();

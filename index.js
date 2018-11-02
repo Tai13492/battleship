@@ -18,12 +18,11 @@ io.on("connection", socket => {
     if (isNameUsed) socket.emit("NAME_ERROR", "This name is already used!");
     else clients.push({ name, id: socket.id });
   });
-  socket.on("JOIN_ROOM", name => {
+  socket.on("JOIN_ROOM", (roomName, name) => {
     if (getRoomName(socket)) socket.leave(getRoomName(socket));
-    socket.join(name);
-  });
-  socket.on("JOINED_OTHER_ROOM", name => {
-    socket.to(getRoomName(socket)).emit("OPPONENT_JOINED", name);
+    socket.join(roomName, () =>
+      socket.to(getRoomName(socket)).emit("OPPONENT_JOINED", name)
+    );
   });
 });
 

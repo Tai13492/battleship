@@ -8,10 +8,10 @@ import SetupBoard from './SetupBoard';
 @inject('battleship')
 @observer
 class Board extends React.Component {
-	componentWillMount() {
-		const { opponentName, joinedOtherRoom } = this.props.battleship;
-		if (opponentName === '') joinedOtherRoom();
-	}
+	// componentWillMount() {
+	// 	const { opponentName, joinedOtherRoom } = this.props.battleship;
+	// 	if (opponentName === '') joinedOtherRoom();
+	// }
 	renderBoard = () => {
 		const { squares, placeShip } = this.props.battleship;
 		return squares.map((square, x) =>
