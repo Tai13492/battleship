@@ -28,16 +28,21 @@ class BattleShipStore {
 		orientation: ''
 	};
 	@observable
+	opponentName = '';
+	@observable
 	docks = [
 		{ shipOrder: 1, status: 'WAITING' },
 		{ shipOrder: 2, status: 'WAITING' },
 		{ shipOrder: 3, status: 'WAITING' },
 		{ shipOrder: 4, status: 'WAITING' }
 	];
+
 	constructor() {
 		if (this.socket !== null) {
 			this.socket.on('SOCKET', id => console.log(id));
-			this.socket.on('GREETINGS_FROM_OPPONENT', msg => console.log(msg));
+			this.socket.on('OPPONENT_JOINED', name =>
+				this.setOpponentName(name)
+			);
 		}
 	}
 
@@ -101,6 +106,10 @@ class BattleShipStore {
 	}
 
 	@action.bound
+	setOpponentName(name) {
+		this.opponentName = name;
+	}
+	@action.bound
 	sendNameToServer() {
 		this.socket.emit('SET_NAME', this.name);
 	}
@@ -110,10 +119,9 @@ class BattleShipStore {
 		this.socket.emit('JOIN_ROOM', name);
 		this.roomName = name;
 	}
-
 	@action.bound
-	sendMyName() {
-		this.socket.emit('GREETINGS', `${this.name} sends his regards!`);
+	joinedOtherRoom() {
+		this.socket.emit('JOINED_OTHER_ROOM', this.name);
 	}
 }
 

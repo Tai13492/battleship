@@ -4,16 +4,16 @@ import { observer, inject } from 'mobx-react';
 import background from '../common/assets/game_bg.jpeg';
 import SetupBoard from './SetupBoard';
 
+
 @inject('battleship')
 @observer
 class Board extends React.Component {
-	componentDidMount() {
-		const { sendMyName } = this.props.battleship;
-		sendMyName();
+	componentWillMount() {
+		const { opponentName, joinedOtherRoom } = this.props.battleship;
+		if (opponentName === '') joinedOtherRoom();
 	}
 	renderBoard = () => {
 		const { squares, placeShip } = this.props.battleship;
-		console.log('I AM CALLED');
 		return squares.map((square, x) =>
 			square.map((s, y) => (
 				<div

@@ -1,6 +1,7 @@
 import React from 'react';
 import background from '../common/assets/game_bg.jpeg';
 import { inject, observer } from 'mobx-react';
+import { Redirect } from 'react-router-dom';
 
 @inject('battleship')
 @observer
@@ -10,8 +11,9 @@ class Lobby extends React.Component {
 	};
 	render() {
 		const { push } = this.props.history;
-		const { name, joinRoom } = this.props.battleship;
+		const { name, joinRoom, opponentName } = this.props.battleship;
 		const { roomName } = this.state;
+		if (opponentName !== '') return <Redirect exact to="/board" />;
 		return (
 			<div
 				style={{
