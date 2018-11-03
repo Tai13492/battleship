@@ -35,8 +35,8 @@ class Game extends React.Component {
 	};
 	renderOpponentBoard = () => {
 		const { opponentSquares } = this.props.battleship;
-		return opponentSquares.map((opponentSquares, x) =>
-			opponentSquares.map((s, y) => {
+		return opponentSquares.map((opponentSquare, x) =>
+			opponentSquare.map((s, y) => {
 				const isEmpty = opponentSquares[x][y].ship === null;
 				const { isHit } = opponentSquares[x][y];
 				return (
@@ -53,7 +53,7 @@ class Game extends React.Component {
 						>
 							{!isEmpty && (
 								<img
-									src={squares[x][y].ship.shipPart}
+									src={opponentSquares[x][y].ship.shipPart}
 									alt="ship_part"
 								/>
 							)}
@@ -74,7 +74,36 @@ class Game extends React.Component {
 					backgroundPosition: 'fixed',
 					padding: 60
 				}}
-			/>
+			>
+				<div className="columns is-variable is-6">
+					<div className="column">
+						<div
+							style={{
+								width: '40vw',
+								height: '80vh',
+								display: 'flex',
+								flexWrap: 'wrap',
+								paddingTop: 40
+							}}
+						>
+							{this.renderBoard()}
+						</div>
+					</div>
+					<div className="column">
+						<div
+							style={{
+								width: '40vw',
+								height: '80vh',
+								display: 'flex',
+								flexWrap: 'wrap',
+								paddingTop: 40
+							}}
+						>
+							{this.renderOpponentBoard()}
+						</div>
+					</div>
+				</div>
+			</div>
 		);
 	}
 }
