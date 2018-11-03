@@ -6,9 +6,16 @@ body {
 
 .clickable {
 	background-color: #a9a9a9;
-	opacity: 0.7;
 }
 
 .clickable:hover {
+	background-color: green;
+}
+
+.clickable-opponent {
+	background-color: #a9a9a9;
+}
+
+.clickable-opponent:hover {
 	background-color: red;
 }

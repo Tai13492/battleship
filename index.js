@@ -48,17 +48,12 @@ io.on("connection", socket => {
       .to(getRoomName(socket))
       .emit("OPPONENT_IS_READY", squares, destroyedShips, playerRoom);
   });
-  socket.on(
-    "GUN_FIRED",
-    (opponentSquares, opponentDestroyedShips, whosTurn) => {
-      socket
-        .to(getRoomName(socket))
-        .emit(
-          "OPPONENT_SHOT",
-          opponentSquares,
-          opponentDestroyedShips,
-          whosTurn
-        );
-    }
-  );
+  socket.on("GUN_FIRED", (opponentSquares, opponentDestroyedShips) => {
+    socket
+      .to(getRoomName(socket))
+      .emit("OPPONENT_SHOT", opponentSquares, opponentDestroyedShips);
+  });
+  socket.on("CHANGE_TURN", name => {
+    socket.to(getRoomName(socket)).emit("TURN_CHANGED", name);
+  });
 });

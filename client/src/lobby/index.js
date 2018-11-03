@@ -11,7 +11,12 @@ class Lobby extends React.Component {
 	};
 	render() {
 		const { push } = this.props.history;
-		const { name, joinRoom, opponentName } = this.props.battleship;
+		const {
+			name,
+			joinRoom,
+			opponentName,
+			setOpponentName
+		} = this.props.battleship;
 		const { roomName } = this.state;
 		if (opponentName !== '') return <Redirect exact to="/board" />;
 		return (
@@ -70,6 +75,7 @@ class Lobby extends React.Component {
 									onClick={() => {
 										push('/board');
 										joinRoom(roomName);
+										setOpponentName(roomName);
 									}}
 								>
 									<strong> START </strong>

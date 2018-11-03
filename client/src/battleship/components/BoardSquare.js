@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 @observer
 class BoardSquare extends React.Component {
 	render() {
-		const { onClick, isEmpty, isTarget } = this.props;
+		const { onClick, isEmpty, isWhite } = this.props;
 		return (
 			<div
 				style={{ position: 'relative', width: '100%', height: '100%' }}
@@ -14,7 +14,8 @@ class BoardSquare extends React.Component {
 					style={{
 						width: '100%',
 						height: '100%',
-						border: '2px solid white'
+						border: '2px solid white',
+						backgroundColor: isWhite && 'white'
 					}}
 					className="clickable"
 					onClick={() => {

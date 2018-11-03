@@ -3,6 +3,7 @@ import background from '../common/assets/game_bg.jpeg';
 import { inject, observer } from 'mobx-react';
 import BoardSquare from './components/BoardSquare';
 import OpponentBoardSquare from './components/OpponentBoardSquare';
+import explosion from '../common/assets/explosion.png';
 
 @inject('battleship')
 @observer
@@ -12,6 +13,7 @@ class Game extends React.Component {
 		return squares.map((square, x) =>
 			square.map((s, y) => {
 				const isEmpty = squares[x][y].ship === null;
+				const { isHit } = squares[x][y];
 				return (
 					<div
 						key={'' + x + y}
@@ -20,6 +22,7 @@ class Game extends React.Component {
 						<BoardSquare
 							onClick={() => console.log(`x:${x},y:${y}`)}
 							isEmpty={isEmpty}
+							isWhite={isHit && isEmpty}
 						>
 							{!isEmpty && (
 								<img
@@ -27,6 +30,10 @@ class Game extends React.Component {
 									alt="ship_part"
 								/>
 							)}
+							{!isEmpty &&
+								isHit && (
+									<img src={explosion} alt="explosion" />
+								)}
 						</BoardSquare>
 					</div>
 				);
@@ -34,7 +41,14 @@ class Game extends React.Component {
 		);
 	};
 	renderOpponentBoard = () => {
-		const { opponentSquares } = this.props.battleship;
+		const {
+			opponentSquares,
+			turn,
+			name,
+			gunFired,
+			sendBoardToOpponent,
+			changeTurn
+		} = this.props.battleship;
 		return opponentSquares.map((opponentSquare, x) =>
 			opponentSquare.map((s, y) => {
 				const isEmpty = opponentSquares[x][y].ship === null;
@@ -45,18 +59,25 @@ class Game extends React.Component {
 						style={{ width: '12.5%', height: '12.5%' }}
 					>
 						<OpponentBoardSquare
-							onClick={() =>
-								isHit
-									? console.log('eiei')
-									: console.log('bibi')
-							}
+							onClick={() => {
+								if (turn === name) {
+									if (isHit) {
+										console.log('YOU CANNOT SHOOT HERE!');
+									} else {
+										gunFired(x, y);
+										sendBoardToOpponent();
+										if (isEmpty) changeTurn();
+									}
+								} else {
+									console.log('NOT YOUR TURN!');
+								}
+							}}
+							isWhite={isHit && isEmpty}
 						>
-							{!isEmpty && (
-								<img
-									src={opponentSquares[x][y].ship.shipPart}
-									alt="ship_part"
-								/>
-							)}
+							{isHit &&
+								!isEmpty && (
+									<img src={explosion} alt="explosion" />
+								)}
 						</OpponentBoardSquare>
 					</div>
 				);
@@ -64,6 +85,7 @@ class Game extends React.Component {
 		);
 	};
 	render() {
+		const { turn } = this.props.battleship;
 		return (
 			<div
 				style={{
@@ -75,7 +97,11 @@ class Game extends React.Component {
 					padding: 60
 				}}
 			>
-				<div className="columns is-variable is-6">
+				<h1 className="title is-2">
+					{turn}
+					's Turn
+				</h1>
+				<div className="columns is-variable is-3">
 					<div className="column">
 						<div
 							style={{

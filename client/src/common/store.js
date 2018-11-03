@@ -80,7 +80,16 @@ class BattleShipStore {
 					);
 				}
 			);
+			this.socket.on('OPPONENT_SHOT', (squares, destroyedShips) => {
+				this.setMyBoard(squares, destroyedShips);
+			});
+			this.socket.on('TURN_CHANGED', name => this.setTurn(name));
 		}
+	}
+
+	@action.bound
+	setTurn(name) {
+		this.turn = name;
 	}
 
 	@action.bound
@@ -88,6 +97,12 @@ class BattleShipStore {
 		this.opponentSquares = opponentSquares;
 		this.opponentDestroyedShips = opponentDestroyedShips;
 		this.turn = playerRoom.firstPlayer;
+	}
+
+	@action.bound
+	setMyBoard(squares, destroyedShips) {
+		this.squares = squares;
+		this.destroyedShips = destroyedShips;
 	}
 
 	@action.bound
@@ -173,10 +188,25 @@ class BattleShipStore {
 		);
 		this.isReady = true;
 	}
-	// @action.bound
-	// joinedOtherRoom() {
-	// 	this.socket.emit('JOINED_OTHER_ROOM', this.name);
-	// }
+	@action.bound
+	gunFired(x, y) {
+		const square = this.opponentSquares[x][y];
+		this.opponentSquares[x][y].isHit = true;
+		if (square.ship !== null) this.opponentDestroyedShips.push(square.ship);
+	}
+	@action.bound
+	sendBoardToOpponent() {
+		this.socket.emit(
+			'GUN_FIRED',
+			this.opponentSquares,
+			this.opponentDestroyedShips
+		);
+	}
+	@action.bound
+	changeTurn() {
+		this.socket.emit('CHANGE_TURN', this.opponentName);
+		this.turn = this.opponentName;
+	}
 }
 
 export default new BattleShipStore();
