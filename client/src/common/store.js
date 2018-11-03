@@ -57,6 +57,12 @@ class BattleShipStore {
 	destroyedShips = [];
 	@observable
 	isReady = false;
+	@observable
+	turn = '';
+	@observable
+	opponentSquares = [];
+	@observable
+	opponentDestroyedShips = [];
 
 	constructor() {
 		if (this.socket !== null) {
@@ -67,12 +73,21 @@ class BattleShipStore {
 			this.socket.on(
 				'OPPONENT_IS_READY',
 				(opponentSquares, opponentDestroyedShips, playerRoom) => {
-					console.log(opponentSquares, 'OPPONENT SQUARES');
-					console.log(opponentDestroyedShips, 'DESTROYED');
-					console.log(playerRoom, 'ROOM');
+					this.initializeOpponent(
+						opponentSquares,
+						opponentDestroyedShips,
+						playerRoom
+					);
 				}
 			);
 		}
+	}
+
+	@action.bound
+	initializeOpponent(opponentSquares, opponentDestroyedShips, playerRoom) {
+		this.opponentSquares = opponentSquares;
+		this.opponentDestroyedShips = opponentDestroyedShips;
+		this.turn = playerRoom.firstPlayer;
 	}
 
 	@action.bound

@@ -1,6 +1,7 @@
 import React from 'react';
 import BoardSquare from './components/BoardSquare';
 import { observer, inject } from 'mobx-react';
+import { Redirect } from 'react-router-dom';
 import background from '../common/assets/game_bg.jpeg';
 import SetupBoard from './SetupBoard';
 
@@ -35,6 +36,9 @@ class Board extends React.Component {
 	};
 
 	render() {
+		const { isReady, opponentSquares } = this.props.battleship;
+		if (isReady && opponentSquares.length > 0)
+			return <Redirect exact to="/game" />;
 		return (
 			<div
 				style={{
