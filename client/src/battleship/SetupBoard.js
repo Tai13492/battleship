@@ -97,7 +97,7 @@ class SetupBoard extends React.Component {
 			);
 	};
 	renderReadyButton = () => {
-		const { docks } = this.props.battleship;
+		const { docks, setIsReady, isReady } = this.props.battleship;
 		if (
 			docks[0].status === 'DEPLOYED' &&
 			docks[1].status === 'DEPLOYED' &&
@@ -116,6 +116,8 @@ class SetupBoard extends React.Component {
 					<button
 						className="button is-large"
 						style={{ width: '100%' }}
+						disabled={isReady}
+						onClick={setIsReady}
 					>
 						<strong> READY ! </strong>
 					</button>

@@ -53,12 +53,24 @@ class BattleShipStore {
 		{ shipOrder: 3, status: 'WAITING' },
 		{ shipOrder: 4, status: 'WAITING' }
 	];
+	@observable
+	destroyedShips = [];
+	@observable
+	isReady = false;
 
 	constructor() {
 		if (this.socket !== null) {
 			this.socket.on('SOCKET', id => console.log(id));
 			this.socket.on('OPPONENT_JOINED', name =>
 				this.setOpponentName(name)
+			);
+			this.socket.on(
+				'OPPONENT_IS_READY',
+				(opponentSquares, opponentDestroyedShips, playerRoom) => {
+					console.log(opponentSquares, 'OPPONENT SQUARES');
+					console.log(opponentDestroyedShips, 'DESTROYED');
+					console.log(playerRoom, 'ROOM');
+				}
 			);
 		}
 	}
@@ -135,6 +147,16 @@ class BattleShipStore {
 	joinRoom(name = this.name) {
 		this.socket.emit('JOIN_ROOM', name, this.name);
 		this.roomName = name;
+	}
+	@action.bound
+	setIsReady() {
+		this.socket.emit(
+			'READY',
+			this.squares,
+			this.destroyedShips,
+			this.roomName
+		);
+		this.isReady = true;
 	}
 	// @action.bound
 	// joinedOtherRoom() {
