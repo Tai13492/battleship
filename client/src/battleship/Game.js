@@ -21,8 +21,6 @@ class Game extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 		const { changeTurn, turn, name, prevTurn } = this.props.battleship;
 		const { countDownTimer } = this.state;
-		console.log(prevTurn, 'prevTurn');
-		console.log(turn, 'turn');
 		if (prevTurn !== turn && turn === name && countDownTimer === 10)
 			this.setTimer();
 		if (prevState.countDownTimer === 0) {
@@ -119,7 +117,7 @@ class Game extends React.Component {
 		);
 	};
 	render() {
-		const { turn } = this.props.battleship;
+		const { turn, opponentDestroyedShips, name } = this.props.battleship;
 		const { countDownTimer } = this.state;
 		return (
 			<div
@@ -140,13 +138,16 @@ class Game extends React.Component {
 						</h1>
 					</div>
 					<div className="column">
-						<h1 className="title is-2 is-white has-text-centered">
+						<h1
+							className={`title is-2 is-white has-text-centered ${turn !==
+								name && 'is-hidden'} `}
+						>
 							{countDownTimer}
 						</h1>
 					</div>
 					<div className="column">
 						<h1 className="title is-2 is-white has-text-right">
-							Score: 0
+							Score: {opponentDestroyedShips.length}
 						</h1>
 					</div>
 				</div>

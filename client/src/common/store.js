@@ -112,7 +112,6 @@ class BattleShipStore {
 		this.opponentSquares = opponentSquares;
 		this.opponentDestroyedShips = opponentDestroyedShips;
 		this.turn = playerRoom.firstPlayer;
-		this.prevTurn = playerRoom.firstPlayer;
 	}
 
 	@action.bound
