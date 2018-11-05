@@ -8,6 +8,38 @@ import explosion from '../common/assets/explosion.png';
 @inject('battleship')
 @observer
 class Game extends React.Component {
+	state = {
+		countDownTimer: 10
+	};
+	componentDidMount() {
+		const { turn, name } = this.props.battleship;
+		if (turn === name) {
+			this.setTimer();
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		const { changeTurn, turn, name, prevTurn } = this.props.battleship;
+		const { countDownTimer } = this.state;
+		console.log(prevTurn, 'prevTurn');
+		console.log(turn, 'turn');
+		if (prevTurn !== turn && turn === name && countDownTimer === 10)
+			this.setTimer();
+		if (prevState.countDownTimer === 0) {
+			clearInterval(this.interval);
+			this.setState({ countDownTimer: 10 });
+			changeTurn();
+		}
+	}
+
+	setTimer = () => {
+		this.interval = setInterval(() => {
+			this.setState(prevState => ({
+				countDownTimer: prevState.countDownTimer - 1
+			}));
+		}, 1000);
+	};
+
 	renderBoard = () => {
 		const { squares } = this.props.battleship;
 		return squares.map((square, x) =>
@@ -67,6 +99,8 @@ class Game extends React.Component {
 									} else {
 										gunFired(x, y);
 										sendBoardToOpponent();
+										clearInterval(this.interval);
+										this.setState({ countDownTimer: 10 });
 										if (isEmpty) changeTurn();
 									}
 								} else {
@@ -86,6 +120,7 @@ class Game extends React.Component {
 	};
 	render() {
 		const { turn } = this.props.battleship;
+		const { countDownTimer } = this.state;
 		return (
 			<div
 				style={{
@@ -97,10 +132,25 @@ class Game extends React.Component {
 					padding: 60
 				}}
 			>
-				<h1 className="title is-2">
-					{turn}
-					's Turn
-				</h1>
+				<div className="columns">
+					<div className="column">
+						<h1 className="title is-2 is-white">
+							{turn}
+							's Turn
+						</h1>
+					</div>
+					<div className="column">
+						<h1 className="title is-2 is-white has-text-centered">
+							{countDownTimer}
+						</h1>
+					</div>
+					<div className="column">
+						<h1 className="title is-2 is-white has-text-right">
+							Score: 0
+						</h1>
+					</div>
+				</div>
+
 				<div className="columns is-variable is-3">
 					<div className="column">
 						<div

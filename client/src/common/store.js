@@ -28,7 +28,7 @@ const ship = {
 
 class BattleShipStore {
 	@observable
-	socket = io('http://localhost:5000') || null;
+	socket = io('http://172.20.10.9:5000') || null;
 	@observable
 	name = '';
 	@observable
@@ -65,6 +65,8 @@ class BattleShipStore {
 	opponentDestroyedShips = [];
 	@observable
 	availableRooms = [];
+	@observable
+	prevTurn = '';
 
 	constructor() {
 		if (this.socket !== null) {
@@ -85,7 +87,9 @@ class BattleShipStore {
 			this.socket.on('OPPONENT_SHOT', (squares, destroyedShips) => {
 				this.setMyBoard(squares, destroyedShips);
 			});
-			this.socket.on('TURN_CHANGED', name => this.setTurn(name));
+			this.socket.on('TURN_CHANGED', name => {
+				this.setTurn(name);
+			});
 			this.socket.on('AVAILABLE_ROOMS', rooms =>
 				this.setAvailableRooms(rooms)
 			);
@@ -99,6 +103,7 @@ class BattleShipStore {
 
 	@action.bound
 	setTurn(name) {
+		this.prevTurn = this.turn;
 		this.turn = name;
 	}
 
@@ -107,6 +112,7 @@ class BattleShipStore {
 		this.opponentSquares = opponentSquares;
 		this.opponentDestroyedShips = opponentDestroyedShips;
 		this.turn = playerRoom.firstPlayer;
+		this.prevTurn = playerRoom.firstPlayer;
 	}
 
 	@action.bound
