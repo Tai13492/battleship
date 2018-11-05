@@ -10,19 +10,35 @@ class Lobby extends React.Component {
 		const { getRooms } = this.props.battleship;
 		getRooms();
 	}
-	state = {
-		roomName: ''
-	};
-	render() {
-		const { push } = this.props.history;
+	renderAvailableRooms = () => {
 		const {
-			name,
-			joinRoom,
 			availableRooms,
-			opponentName,
-			setOpponentName
+			joinRoom,
+			setOpponentName,
+			name
 		} = this.props.battleship;
-		const { roomName } = this.state;
+		const { push } = this.props.history;
+
+		return availableRooms.map(availableRoom => {
+			const { roomName } = availableRoom;
+			return (
+				<div
+					className={`box-list ${name === roomName && 'is-hidden'}`}
+					key={roomName}
+					onClick={() => {
+						push('/board');
+						joinRoom(roomName);
+						setOpponentName(roomName);
+					}}
+				>
+					<p className="title is-5 is-white"> {roomName}</p>
+				</div>
+			);
+		});
+	};
+
+	render() {
+		const { name, opponentName, availableRooms } = this.props.battleship;
 		if (opponentName !== '') return <Redirect exact to="/board" />;
 		return (
 			<div
@@ -38,56 +54,56 @@ class Lobby extends React.Component {
 				<div className="container">
 					<div className="columns">
 						<div className="column is-6">
-							<h1 className="title" style={{ color: 'white' }}>
+							<h1
+								className="title is-2"
+								style={{ color: 'white' }}
+							>
 								{' '}
 								Welcome,
 								{name}
 							</h1>
-						</div>
-						<div className="column is-10 is-offset-1">
 							<h1
-								className="title is-1"
+								className="title is-2"
 								style={{ color: 'white' }}
 							>
-								Welcome, {name}
+								Your Lobby Name is {name}
 							</h1>
 							<h1
 								className="title is-2"
 								style={{ color: 'white' }}
 							>
-								Your room name is {name}. <br /> Room Status:
-								waiting for connection...
+								Lobby Status: Waiting for connection...
 							</h1>
-							<h1> Available Rooms </h1>
-							{availableRooms.map(room => (
-								<p style={{ color: 'white' }}>
-									{' '}
-									{room.roomName}
-								</p>
-							))}
-							<h1
-								className="title is-2"
-								style={{ color: 'white' }}
-							>
-								{' '}
-								Join a room{' '}
-							</h1>
-							<div className="field">
-								<div className="control">
-									<input
-										type="text"
-										className="input"
-										placeholder="Enter a room name"
-										value={roomName}
-										onChange={e =>
-											this.setState({
-												roomName: e.target.value
-											})
-										}
-									/>
+							<article className="message is-info">
+								<div className="message-header">
+									<h1 className="title is-2">
+										Players Online: {availableRooms.length}{' '}
+										people
+									</h1>
 								</div>
+							</article>
+						</div>
+						<div className="column is-6">
+							<h1 className="title is-2 is-white">
+								Available Lobby
+							</h1>
+							<h1 className="title is-3 is-white">
+								Click to Join
+							</h1>
+							<div className="background-panel">
+								{this.renderAvailableRooms()}
 							</div>
-							<p className="has-text-centered">
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+}
+
+export default Lobby;
+{
+	/* <p className="has-text-centered">
 								<button
 									className="button"
 									style={{ marginTop: 24 }}
@@ -99,13 +115,5 @@ class Lobby extends React.Component {
 								>
 									<strong> START </strong>
 								</button>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+							</p> */
 }
-
-export default Lobby;

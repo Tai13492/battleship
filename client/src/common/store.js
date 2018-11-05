@@ -28,7 +28,7 @@ const ship = {
 
 class BattleShipStore {
 	@observable
-	socket = io('http://172.20.10.9:5000') || null;
+	socket = io('http://localhost:5000') || null;
 	@observable
 	name = '';
 	@observable

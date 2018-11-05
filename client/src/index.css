@@ -19,3 +19,26 @@ body {
 .clickable-opponent:hover {
 	background-color: red;
 }
+
+.background-panel {
+	background-color: #545959;
+	padding: 16px;
+	height: 50vh;
+	display: flex;
+	overflow-y: auto;
+	flex-direction: column;
+}
+
+.box-list {
+	background-color: #a9e3f9;
+	padding: 12px;
+	border-radius: 4px;
+	margin-bottom: 12px;
+}
+
+.is-white {
+	color: white;
+}
+.m-12 {
+	margin-bottom: 12px !important;
+}
