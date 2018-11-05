@@ -8,7 +8,6 @@ import { Provider } from 'mobx-react';
 import battleship from './common/store';
 
 const store = { battleship };
-// const store = { socket, battleship };
 
 ReactDOM.render(
 	<Provider {...store}>

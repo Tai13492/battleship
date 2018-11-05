@@ -15,6 +15,8 @@ const enterRoom = (roomName, name) => {
   if (index === -1) {
     rooms.push({ roomName, players: [name] });
   } else {
+    const oldRoomIndex = rooms.findIndex(room => room.roomName === name);
+    rooms[oldRoomIndex].players = [];
     const randomPlayer = Math.round(Math.random());
     const firstPlayer = randomPlayer === 0 ? rooms[index].players[0] : name;
     rooms[index] = {
@@ -23,6 +25,11 @@ const enterRoom = (roomName, name) => {
       firstPlayer
     };
   }
+};
+
+const getAvailableRooms = () => {
+  const availableRooms = rooms.filter(room => room.players.length === 1);
+  return availableRooms;
 };
 
 io = socket(server);
@@ -38,9 +45,13 @@ io.on("connection", socket => {
   socket.on("JOIN_ROOM", (roomName, name) => {
     if (getRoomName(socket)) socket.leave(getRoomName(socket));
     enterRoom(roomName, socket.name);
-    socket.join(roomName, () =>
-      socket.to(getRoomName(socket)).emit("OPPONENT_JOINED", name)
-    );
+    socket.join(roomName, () => {
+      socket.to(getRoomName(socket)).emit("OPPONENT_JOINED", name);
+      io.emit("AVAILABLE_ROOMS", getAvailableRooms());
+    });
+  });
+  socket.on("GET_ROOMS", () => {
+    io.emit("AVAILABLE_ROOMS", getAvailableRooms());
   });
   socket.on("READY", (squares, destroyedShips, roomName) => {
     const playerRoom = rooms.find(room => room.roomName === roomName);

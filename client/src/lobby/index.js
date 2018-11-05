@@ -1,11 +1,15 @@
 import React from 'react';
-import background from '../common/assets/game_bg.jpeg';
+import background from '../common/assets/first_page_bg.jpeg';
 import { inject, observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 
 @inject('battleship')
 @observer
 class Lobby extends React.Component {
+	componentDidMount() {
+		const { getRooms } = this.props.battleship;
+		getRooms();
+	}
 	state = {
 		roomName: ''
 	};
@@ -14,6 +18,7 @@ class Lobby extends React.Component {
 		const {
 			name,
 			joinRoom,
+			availableRooms,
 			opponentName,
 			setOpponentName
 		} = this.props.battleship;
@@ -32,6 +37,13 @@ class Lobby extends React.Component {
 			>
 				<div className="container">
 					<div className="columns">
+						<div className="column is-6">
+							<h1 className="title" style={{ color: 'white' }}>
+								{' '}
+								Welcome,
+								{name}
+							</h1>
+						</div>
 						<div className="column is-10 is-offset-1">
 							<h1
 								className="title is-1"
@@ -46,6 +58,13 @@ class Lobby extends React.Component {
 								Your room name is {name}. <br /> Room Status:
 								waiting for connection...
 							</h1>
+							<h1> Available Rooms </h1>
+							{availableRooms.map(room => (
+								<p style={{ color: 'white' }}>
+									{' '}
+									{room.roomName}
+								</p>
+							))}
 							<h1
 								className="title is-2"
 								style={{ color: 'white' }}

@@ -16,7 +16,6 @@ class Router extends Component {
 					<Route exact path="/lobby" component={Lobby} />
 					<Route exact path="/board" component={Board} />
 					<Route exact path="/game" component={Game} />
-					{/* <Route exact path="/game" component={Battleship} /> */}
 				</Switch>
 			</BrowserRouter>
 		);

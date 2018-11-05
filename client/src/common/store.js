@@ -28,7 +28,7 @@ const ship = {
 
 class BattleShipStore {
 	@observable
-	socket = io('localhost:5000') || null;
+	socket = io('http://172.20.10.9:5000') || null;
 	@observable
 	name = '';
 	@observable
@@ -63,6 +63,8 @@ class BattleShipStore {
 	opponentSquares = [];
 	@observable
 	opponentDestroyedShips = [];
+	@observable
+	availableRooms = [];
 
 	constructor() {
 		if (this.socket !== null) {
@@ -84,7 +86,15 @@ class BattleShipStore {
 				this.setMyBoard(squares, destroyedShips);
 			});
 			this.socket.on('TURN_CHANGED', name => this.setTurn(name));
+			this.socket.on('AVAILABLE_ROOMS', rooms =>
+				this.setAvailableRooms(rooms)
+			);
 		}
+	}
+
+	@action.bound
+	setAvailableRooms(rooms) {
+		this.availableRooms = rooms;
 	}
 
 	@action.bound
@@ -119,6 +129,9 @@ class BattleShipStore {
 		if (shipOrder === '') return;
 		if (orientation === 'HORIZONTAL') {
 			if (this.squares[x][y + 3] === undefined) return;
+			for (let check = 0; check < 4; check++) {
+				if (this.squares[x][y + check].ship !== null) return;
+			}
 			for (let i = 0; i < 4; i++) {
 				this.squares[x][y + i].ship = {
 					...ship,
@@ -129,6 +142,9 @@ class BattleShipStore {
 			}
 		} else {
 			if (this.squares[x + 3] === undefined) return;
+			for (let check = 0; check < 4; check++) {
+				if (this.squares[x + check][y].ship !== null) return;
+			}
 			for (let i = 0; i < 4; i++) {
 				this.squares[x + i][y].ship = {
 					...ship,
@@ -206,6 +222,10 @@ class BattleShipStore {
 	changeTurn() {
 		this.socket.emit('CHANGE_TURN', this.opponentName);
 		this.turn = this.opponentName;
+	}
+	@action.bound
+	getRooms() {
+		this.socket.emit('GET_ROOMS');
 	}
 }
 

@@ -15,33 +15,32 @@ class Game extends React.Component {
 				const isEmpty = squares[x][y].ship === null;
 				const { isHit } = squares[x][y];
 				return (
-					console.log(isHit && !isEmpty) || (
-						<div
-							key={'' + x + y}
-							style={{ width: '12.5%', height: '12.5%' }}
+					<div
+						key={'' + x + y}
+						style={{ width: '12.5%', height: '12.5%' }}
+					>
+						<BoardSquare
+							onClick={() => console.log(`x:${x},y:${y}`)}
+							isEmpty={isEmpty}
+							isWhite={isHit && isEmpty}
 						>
-							<BoardSquare
-								onClick={() => console.log(`x:${x},y:${y}`)}
-								isEmpty={isEmpty}
-								isWhite={isHit && isEmpty}
-							>
-								{isHit && !isEmpty ? (
-									<img src={explosion} alt="explosion" />
-								) : (
-									!isEmpty && (
-										<img
-											src={squares[x][y].ship.shipPart}
-											alt="ship_part"
-										/>
-									)
-								)}
-							</BoardSquare>
-						</div>
-					)
+							{isHit && !isEmpty ? (
+								<img src={explosion} alt="explosion" />
+							) : (
+								!isEmpty && (
+									<img
+										src={squares[x][y].ship.shipPart}
+										alt="ship_part"
+									/>
+								)
+							)}
+						</BoardSquare>
+					</div>
 				);
 			})
 		);
 	};
+
 	renderOpponentBoard = () => {
 		const {
 			opponentSquares,
