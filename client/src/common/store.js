@@ -105,6 +105,9 @@ class BattleShipStore {
 			this.socket.on('OPPONENT_ASK_FOR_RESET', () => {
 				this.setOpponentReset(true);
 			});
+			this.socket.on('OPPONENT_DECLINED_RESET', () => {
+				this.setPlayerReset(false);
+			});
 		}
 	}
 	@action.bound
@@ -304,6 +307,10 @@ class BattleShipStore {
 	@action.bound
 	setOpponentReset(bool) {
 		this.opponentReset = bool;
+	}
+	@action.bound
+	declinedReset() {
+		this.socket.emit('DECLINED_RESET');
 	}
 }
 

@@ -7,7 +7,12 @@ import full_ship_vertical from './assets/full_ship_vertical.png';
 @observer
 class SetupBoard extends React.Component {
 	renderForm = () => {
-		const { setActiveButton, docks, resetShip } = this.props.battleship;
+		const {
+			setActiveButton,
+			docks,
+			resetShip,
+			isReady
+		} = this.props.battleship;
 		return docks.map((ship, i) => (
 			<div className="field is-horizontal" key={i + 'form'}>
 				<div className="field-label is-normal">
@@ -43,7 +48,7 @@ class SetupBoard extends React.Component {
 						<p className="control">
 							<button
 								className="button is-danger"
-								disabled={ship.status === 'WAITING'}
+								disabled={ship.status === 'WAITING' || isReady}
 								onClick={() => resetShip(ship.shipOrder)}
 							>
 								Reset

@@ -83,4 +83,7 @@ io.on("connection", socket => {
   socket.on("ASK_FOR_RESET", () => {
     socket.to(getRoomName(socket)).emit("OPPONENT_ASK_FOR_RESET");
   });
+  socket.on("DECLINED_RESET", () => {
+    socket.to(getRoomName(socket)).emit("OPPONENT_DECLINED_RESET");
+  });
 });

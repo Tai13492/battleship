@@ -9,7 +9,8 @@ import explosion from '../common/assets/explosion.png';
 @observer
 class Game extends React.Component {
 	state = {
-		countDownTimer: 10
+		countDownTimer: 10,
+		rematchCount: 0
 	};
 	componentDidMount() {
 		const { turn, name } = this.props.battleship;
@@ -124,20 +125,20 @@ class Game extends React.Component {
 			isGameOver,
 			opponentDestroyedShips,
 			destroyedShips,
-			setIsGameOver,
 			backToLobby,
 			playerReset,
 			opponentReset,
 			askForReset,
-			resetGame
+			resetGame,
+			setOpponentReset,
+			declinedReset
 		} = this.props.battleship;
 		const { push } = this.props.history;
-		// console.log(playerReset, 'playerReset');
-		// console.log(opponentReset, 'opponentReset');
-		const { countDownTimer } = this.state;
+		const { countDownTimer, rematchCount } = this.state;
 		if (playerReset && opponentReset) {
 			resetGame(push);
 		}
+		console.log(rematchCount);
 		return (
 			<div
 				style={{
@@ -171,32 +172,113 @@ class Game extends React.Component {
 					</div>
 				</div>
 
-				<div className="columns is-variable is-3">
-					<div className="column">
+				<div className="columns is-variable is-3 is-centered">
+					<div
+						className="column"
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center'
+						}}
+					>
 						<div
 							style={{
-								width: '40vw',
-								height: '80vh',
+								width: '30vw',
+								height: '60vh',
 								display: 'flex',
 								flexWrap: 'wrap',
-								paddingTop: 40
+								paddingTop: 20
 							}}
 						>
 							{this.renderBoard()}
 						</div>
 					</div>
-					<div className="column">
+					<div
+						className="column"
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center'
+						}}
+					>
 						<div
 							style={{
-								width: '40vw',
-								height: '80vh',
+								width: '30vw',
+								height: '60vh',
 								display: 'flex',
 								flexWrap: 'wrap',
-								paddingTop: 40
+								paddingTop: 20
 							}}
 						>
 							{this.renderOpponentBoard()}
 						</div>
+					</div>
+				</div>
+				<p className="has-text-centered">
+					<button
+						className={`button is-danger ${(rematchCount > 1 ||
+							name !== turn) &&
+							'is-hidden'}`}
+						onClick={() => {
+							askForReset();
+							this.setState(prevState => ({
+								rematchCount: prevState.rematchCount + 1
+							}));
+						}}
+						style={{ marginTop: 20 }}
+					>
+						Rematch ?
+					</button>
+				</p>
+
+				<div className={`modal ${playerReset && 'is-active'}`}>
+					<div className="modal-background" />
+					<div className="modal-content">
+						<h1 className="title is-2 is-white has-text-centered">
+							Waiting for opponent...
+						</h1>
+					</div>
+				</div>
+				<div className={`modal ${opponentReset && 'is-active'}`}>
+					<div className="modal-background" />
+					<div
+						className="modal-content"
+						style={{ backgroundColor: 'white' }}
+					>
+						<div className="modal-card">
+							<header className="modal-card-head">
+								<p className="modal-card-title has-text-centered">
+									Opponent ask for a rematch!
+								</p>
+							</header>
+						</div>
+						<section
+							className="modal-card-body"
+							style={{ padding: 24 }}
+						>
+							<h1 className="title is-1 has-text-centered">
+								Would you like to rematch ?
+							</h1>
+						</section>
+						<footer className="modal-card-foot">
+							<button
+								className="button is-success"
+								onClick={() => {
+									askForReset();
+								}}
+							>
+								Rematch!
+							</button>
+							<button
+								className="button is-danger"
+								onClick={() => {
+									declinedReset();
+									setOpponentReset(false);
+								}}
+							>
+								No!
+							</button>
+						</footer>
 					</div>
 				</div>
 				<div className={`modal ${isGameOver && 'is-active'}`}>
@@ -210,10 +292,6 @@ class Game extends React.Component {
 								<p className="modal-card-title has-text-centered">
 									It's GAME!
 								</p>
-								<button
-									className="delete"
-									onClick={() => setIsGameOver(false)}
-								/>
 							</header>
 						</div>
 						<section
