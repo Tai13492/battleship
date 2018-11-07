@@ -67,4 +67,7 @@ io.on("connection", socket => {
   socket.on("CHANGE_TURN", name => {
     socket.to(getRoomName(socket)).emit("TURN_CHANGED", name);
   });
+  socket.on("END_GAME", () => {
+    io.in(getRoomName(socket)).emit("GAME_OVER");
+  });
 });

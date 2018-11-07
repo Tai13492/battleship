@@ -28,7 +28,7 @@ const ship = {
 
 class BattleShipStore {
 	@observable
-	socket = io('http://172.20.10.9:5000') || null;
+	socket = io('http://localhost:5000') || null;
 	@observable
 	name = '';
 	@observable
@@ -67,6 +67,8 @@ class BattleShipStore {
 	availableRooms = [];
 	@observable
 	prevTurn = '';
+	@observable
+	isGameOver = false;
 
 	constructor() {
 		if (this.socket !== null) {
@@ -93,7 +95,14 @@ class BattleShipStore {
 			this.socket.on('AVAILABLE_ROOMS', rooms =>
 				this.setAvailableRooms(rooms)
 			);
+			this.socket.on('GAME_OVER', () => {
+				this.setIsGameOver(true);
+			});
 		}
+	}
+	@action.bound
+	setIsGameOver(bool) {
+		this.isGameOver = bool;
 	}
 
 	@action.bound
@@ -217,6 +226,9 @@ class BattleShipStore {
 	}
 	@action.bound
 	sendBoardToOpponent() {
+		if (this.opponentDestroyedShips.length > 15) {
+			this.socket.emit('END_GAME');
+		}
 		this.socket.emit(
 			'GUN_FIRED',
 			this.opponentSquares,

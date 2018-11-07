@@ -117,7 +117,14 @@ class Game extends React.Component {
 		);
 	};
 	render() {
-		const { turn, opponentDestroyedShips, name } = this.props.battleship;
+		const {
+			turn,
+			name,
+			isGameOver,
+			opponentDestroyedShips,
+			destroyedShips,
+			setIsGameOver
+		} = this.props.battleship;
 		const { countDownTimer } = this.state;
 		return (
 			<div
@@ -178,6 +185,54 @@ class Game extends React.Component {
 						>
 							{this.renderOpponentBoard()}
 						</div>
+					</div>
+				</div>
+				<div className={`modal ${isGameOver && 'is-active'}`}>
+					<div className="modal-background" />
+					<div
+						className="modal-content"
+						style={{ backgroundColor: 'white' }}
+					>
+						<div className="modal-card">
+							<header className="modal-card-head">
+								<p className="modal-card-title has-text-centered">
+									It's GAME!
+								</p>
+								<button
+									className="delete"
+									onClick={() => setIsGameOver(false)}
+								/>
+							</header>
+						</div>
+						<section
+							className="modal-card-body"
+							style={{ padding: 24 }}
+						>
+							{destroyedShips.length > 15 ? (
+								<h1 className="title is-1 has-text-centered">
+									YOU LOSE !
+								</h1>
+							) : (
+								<h1 className="title is-1 has-text-centered">
+									You WIN!
+								</h1>
+							)}
+							<h1 className="title is-2">
+								Your score : {opponentDestroyedShips.length}
+							</h1>
+							<h1 className="title is-2">
+								Opponent score : {destroyedShips.length}
+							</h1>
+						</section>
+						<footer className="modal-card-foot">
+							<button
+								className="button is-success"
+								onClick={() => setIsGameOver(false)}
+							>
+								Rematch!
+							</button>
+							<button className="button"> Back to lobby</button>
+						</footer>
 					</div>
 				</div>
 			</div>
