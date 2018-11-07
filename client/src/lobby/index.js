@@ -7,7 +7,8 @@ import { Redirect } from 'react-router-dom';
 @observer
 class Lobby extends React.Component {
 	componentDidMount() {
-		const { getRooms } = this.props.battleship;
+		const { joinRoom, getRooms } = this.props.battleship;
+		joinRoom();
 		getRooms();
 	}
 	renderAvailableRooms = () => {
@@ -102,18 +103,4 @@ class Lobby extends React.Component {
 }
 
 export default Lobby;
-{
-	/* <p className="has-text-centered">
-								<button
-									className="button"
-									style={{ marginTop: 24 }}
-									onClick={() => {
-										push('/board');
-										joinRoom(roomName);
-										setOpponentName(roomName);
-									}}
-								>
-									<strong> START </strong>
-								</button>
-							</p> */
-}
+

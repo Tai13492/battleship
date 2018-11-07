@@ -80,6 +80,7 @@ class Game extends React.Component {
 			sendBoardToOpponent,
 			changeTurn
 		} = this.props.battleship;
+
 		return opponentSquares.map((opponentSquare, x) =>
 			opponentSquare.map((s, y) => {
 				const isEmpty = opponentSquares[x][y].ship === null;
@@ -123,8 +124,10 @@ class Game extends React.Component {
 			isGameOver,
 			opponentDestroyedShips,
 			destroyedShips,
-			setIsGameOver
+			setIsGameOver,
+			backToLobby
 		} = this.props.battleship;
+		const { push } = this.props.history;
 		const { countDownTimer } = this.state;
 		return (
 			<div
@@ -231,7 +234,12 @@ class Game extends React.Component {
 							>
 								Rematch!
 							</button>
-							<button className="button"> Back to lobby</button>
+							<button
+								className="button"
+								onClick={() => backToLobby(push)}
+							>
+								Back to lobby
+							</button>
 						</footer>
 					</div>
 				</div>

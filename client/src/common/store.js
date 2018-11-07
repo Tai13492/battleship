@@ -244,6 +244,27 @@ class BattleShipStore {
 	getRooms() {
 		this.socket.emit('GET_ROOMS');
 	}
+	@action.bound
+	backToLobby(push) {
+		this.socket.emit('BACK_TO_LOBBY', this.roomName, this.name);
+		this.squares = Array(8).fill(Array(8).fill(square, 0, 8), 0, 8);
+		this.roomName = this.name;
+		this.opponentName = '';
+		this.docks = [
+			{ shipOrder: 1, status: 'WAITING' },
+			{ shipOrder: 2, status: 'WAITING' },
+			{ shipOrder: 3, status: 'WAITING' },
+			{ shipOrder: 4, status: 'WAITING' }
+		];
+		this.destroyedShips = [];
+		this.isReady = false;
+		this.turn = '';
+		this.opponentSquares = [];
+		this.opponentDestroyedShips = [];
+		this.prevTurn = '';
+		this.isGameOver = false;
+		push('/lobby');
+	}
 }
 
 export default new BattleShipStore();

@@ -70,4 +70,14 @@ io.on("connection", socket => {
   socket.on("END_GAME", () => {
     io.in(getRoomName(socket)).emit("GAME_OVER");
   });
+  socket.on("BACK_TO_LOBBY", (previousRoomName, newRoomName) => {
+    if (previousRoomName === newRoomName) {
+      const index = rooms.findIndex(room => room.roomName === previousRoomName);
+      rooms = [...rooms.slice(0, index), ...rooms.slice(index + 1)];
+    } else {
+      const index2 = rooms.findIndex(room => room.roomName === newRoomName);
+      rooms = [...rooms.slice(0, index2), ...rooms.slice(index2 + 1)];
+    }
+    socket.leave(getRoomName(socket));
+  });
 });
