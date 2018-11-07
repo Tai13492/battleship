@@ -80,4 +80,7 @@ io.on("connection", socket => {
     }
     socket.leave(getRoomName(socket));
   });
+  socket.on("ASK_FOR_RESET", () => {
+    socket.to(getRoomName(socket)).emit("OPPONENT_ASK_FOR_RESET");
+  });
 });

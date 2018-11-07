@@ -125,10 +125,19 @@ class Game extends React.Component {
 			opponentDestroyedShips,
 			destroyedShips,
 			setIsGameOver,
-			backToLobby
+			backToLobby,
+			playerReset,
+			opponentReset,
+			askForReset,
+			resetGame
 		} = this.props.battleship;
 		const { push } = this.props.history;
+		// console.log(playerReset, 'playerReset');
+		// console.log(opponentReset, 'opponentReset');
 		const { countDownTimer } = this.state;
+		if (playerReset && opponentReset) {
+			resetGame(push);
+		}
 		return (
 			<div
 				style={{
@@ -230,7 +239,10 @@ class Game extends React.Component {
 						<footer className="modal-card-foot">
 							<button
 								className="button is-success"
-								onClick={() => setIsGameOver(false)}
+								onClick={() => {
+									askForReset();
+									// setIsGameOver(false);
+								}}
 							>
 								Rematch!
 							</button>
@@ -240,6 +252,10 @@ class Game extends React.Component {
 							>
 								Back to lobby
 							</button>
+							<p>
+								{playerReset &&
+									'waiting for your opponent decision....'}
+							</p>
 						</footer>
 					</div>
 				</div>

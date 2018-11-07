@@ -69,6 +69,10 @@ class BattleShipStore {
 	prevTurn = '';
 	@observable
 	isGameOver = false;
+	@observable
+	playerReset = false;
+	@observable
+	opponentReset = false;
 
 	constructor() {
 		if (this.socket !== null) {
@@ -97,6 +101,9 @@ class BattleShipStore {
 			);
 			this.socket.on('GAME_OVER', () => {
 				this.setIsGameOver(true);
+			});
+			this.socket.on('OPPONENT_ASK_FOR_RESET', () => {
+				this.setOpponentReset(true);
 			});
 		}
 	}
@@ -263,7 +270,40 @@ class BattleShipStore {
 		this.opponentDestroyedShips = [];
 		this.prevTurn = '';
 		this.isGameOver = false;
+		this.setPlayerReset(false);
 		push('/lobby');
+	}
+	@action.bound
+	resetGame(push) {
+		this.setPlayerReset(false);
+		this.setOpponentReset(false);
+		this.squares = Array(8).fill(Array(8).fill(square, 0, 8), 0, 8);
+		this.docks = [
+			{ shipOrder: 1, status: 'WAITING' },
+			{ shipOrder: 2, status: 'WAITING' },
+			{ shipOrder: 3, status: 'WAITING' },
+			{ shipOrder: 4, status: 'WAITING' }
+		];
+		this.destroyedShips = [];
+		this.isReady = false;
+		this.opponentSquares = [];
+		this.opponentDestroyedShips = [];
+		this.prevTurn = '';
+		this.isGameOver = false;
+		push('/board');
+	}
+	@action.bound
+	askForReset() {
+		this.setPlayerReset(true);
+		this.socket.emit('ASK_FOR_RESET');
+	}
+	@action.bound
+	setPlayerReset(bool) {
+		this.playerReset = bool;
+	}
+	@action.bound
+	setOpponentReset(bool) {
+		this.opponentReset = bool;
 	}
 }
 
