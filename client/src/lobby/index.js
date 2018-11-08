@@ -39,7 +39,12 @@ class Lobby extends React.Component {
 	};
 
 	render() {
-		const { name, opponentName, availableRooms } = this.props.battleship;
+		const {
+			name,
+			opponentName,
+			availableRooms,
+			totalPlayers
+		} = this.props.battleship;
 		if (opponentName !== '') return <Redirect exact to="/board" />;
 		return (
 			<div
@@ -78,8 +83,15 @@ class Lobby extends React.Component {
 							<article className="message is-info">
 								<div className="message-header">
 									<h1 className="title is-2">
-										Players Online: {availableRooms.length}{' '}
-										people
+										Players Online: {totalPlayers} people
+									</h1>
+								</div>
+							</article>
+							<article className="message is-link">
+								<div className="message-header">
+									<h1 className="title is-2">
+										Rooms available:{' '}
+										{availableRooms.length - 1} rooms
 									</h1>
 								</div>
 							</article>
@@ -103,4 +115,3 @@ class Lobby extends React.Component {
 }
 
 export default Lobby;
-

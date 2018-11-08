@@ -75,7 +75,7 @@ class BattleShipStore {
 	opponentReset = false;
 	@observable playerPoint = 0;
 	@observable opponentPoint = 0;
-
+	@observable totalPlayers = 0;
 	constructor() {
 		if (this.socket !== null) {
 			this.socket.on('SOCKET', id => console.log(id));
@@ -110,7 +110,12 @@ class BattleShipStore {
 			this.socket.on('OPPONENT_DECLINED_RESET', () => {
 				this.setPlayerReset(false);
 			});
+			this.socket.on('TOTAL_PLAYERS', num => this.setTotalPlayers(num));
 		}
+	}
+	@action.bound
+	setTotalPlayers(num) {
+		this.totalPlayers = num;
 	}
 	@action.bound
 	setIsGameOver(bool) {

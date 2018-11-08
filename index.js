@@ -16,7 +16,9 @@ const enterRoom = (roomName, name) => {
     rooms.push({ roomName, players: [name] });
   } else {
     const oldRoomIndex = rooms.findIndex(room => room.roomName === name);
-    rooms[oldRoomIndex].players = [];
+    if (rooms[oldRoomIndex].players) {
+      rooms[oldRoomIndex].players = [];
+    }
     const players = [rooms[index].players[0], name];
     const randomPlayer = Math.round(Math.random());
     const firstPlayer = randomPlayer === 0 ? players[0] : players[1];
@@ -41,7 +43,10 @@ io.on("connection", socket => {
     const isNameUsed = !!clients.find(client => client.name === name);
     socket.name = name;
     if (isNameUsed) socket.emit("NAME_ERROR", "This name is already used!");
-    else clients.push({ name, id: socket.id });
+    else {
+      clients.push({ name, id: socket.id });
+      io.emit("TOTAL_PLAYERS", clients.length);
+    }
   });
   socket.on("JOIN_ROOM", (roomName, name) => {
     if (getRoomName(socket)) socket.leave(getRoomName(socket));
@@ -93,5 +98,11 @@ io.on("connection", socket => {
   });
   socket.on("DECLINED_RESET", () => {
     socket.to(getRoomName(socket)).emit("OPPONENT_DECLINED_RESET");
+  });
+  socket.on("disconnect", () => {
+    clients.forEach((client, idx) => {
+      if (client.id === socket.id) clients.splice(idx, 1);
+    });
+    io.emit("TOTAL_PLAYERS", clients.length);
   });
 });
