@@ -6,6 +6,9 @@ import { Redirect } from 'react-router-dom';
 @inject('battleship')
 @observer
 class Lobby extends React.Component {
+	state = {
+		showTutorial: false
+	};
 	componentDidMount() {
 		const { joinRoom, getRooms } = this.props.battleship;
 		joinRoom();
@@ -45,6 +48,7 @@ class Lobby extends React.Component {
 			availableRooms,
 			totalPlayers
 		} = this.props.battleship;
+		const { showTutorial } = this.state;
 		if (opponentName !== '') return <Redirect exact to="/board" />;
 		return (
 			<div
@@ -90,11 +94,19 @@ class Lobby extends React.Component {
 							<article className="message is-link">
 								<div className="message-header">
 									<h1 className="title is-2">
-										Rooms available:{' '}
+										Rooms Available:{' '}
 										{availableRooms.length - 1} rooms
 									</h1>
 								</div>
 							</article>
+							<button
+								className="button is-large"
+								onClick={() =>
+									this.setState({ showTutorial: true })
+								}
+							>
+								Tutorial
+							</button>
 						</div>
 						<div className="column is-6">
 							<h1 className="title is-2 is-white">
@@ -107,6 +119,63 @@ class Lobby extends React.Component {
 								{this.renderAvailableRooms()}
 							</div>
 						</div>
+					</div>
+				</div>
+				<div className={`modal ${showTutorial && 'is-active'}`}>
+					<div className="modal-background" />
+					<div
+						className="modal-content"
+						style={{ backgroundColor: 'white' }}
+					>
+						<div className="modal-card">
+							<header className="modal-card-head">
+								<p className="modal-card-title has-text-centered">
+									Tutorial
+								</p>
+							</header>
+						</div>
+						<section
+							className="modal-card-body"
+							style={{ padding: 24 }}
+						>
+							<div className="content">
+								<h1 className="title is-3">
+									Welcome to the battle of the sea!
+								</h1>
+								<h1 className="title is-4">
+									Here is a quick guide on how to get the
+									victory over the enemy.
+								</h1>
+								<ol>
+									<li>
+										{' '}
+										Position your ships! All 4 of them.
+									</li>
+									<li>
+										{' '}
+										Each turn, guess where the opponent ship
+										is, if your guess is right then enjoy
+										another free extra turn!
+									</li>
+									<li>
+										{' '}
+										Try to sink all your enemy ships before
+										they sink yours!
+									</li>
+									<li> Good luck and have fun</li>
+								</ol>
+							</div>
+						</section>
+						<footer className="modal-card-foot">
+							<button
+								className="button is-danger"
+								onClick={() => {
+									this.setState({ showTutorial: false });
+								}}
+							>
+								close
+							</button>
+						</footer>
 					</div>
 				</div>
 			</div>
