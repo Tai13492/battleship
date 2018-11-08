@@ -122,6 +122,7 @@ class Game extends React.Component {
 		const {
 			turn,
 			name,
+			opponentName,
 			isGameOver,
 			opponentDestroyedShips,
 			destroyedShips,
@@ -132,7 +133,11 @@ class Game extends React.Component {
 			resetGame,
 			setOpponentReset,
 			declinedReset,
-			roomName
+			roomName,
+			playerPoint,
+			opponentPoint,
+			incrementPlayerPoint,
+			incrementOpponentPoint
 		} = this.props.battleship;
 		const { push } = this.props.history;
 		const { countDownTimer, rematchCount } = this.state;
@@ -172,7 +177,20 @@ class Game extends React.Component {
 						</h1>
 					</div>
 				</div>
-
+				<div className="columns">
+					<div className="column">
+						<h1 className="title is-3 is-white">
+							{name} <br />
+							Point: {playerPoint}
+						</h1>
+					</div>
+					<div className="column">
+						<h1 className="title is-3 is-white has-text-right">
+							{opponentName} <br />
+							Point: {opponentPoint}
+						</h1>
+					</div>
+				</div>
 				<div className="columns is-variable is-3 is-centered">
 					<div
 						className="column"
@@ -320,9 +338,11 @@ class Game extends React.Component {
 								className="button is-success"
 								onClick={() => {
 									if (opponentDestroyedShips.length > 15) {
-										askForReset(name,roomName);
+										askForReset(name, roomName);
+										incrementPlayerPoint();
 									} else {
 										askForReset();
+										incrementOpponentPoint();
 									}
 								}}
 							>

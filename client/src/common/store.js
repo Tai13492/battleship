@@ -73,6 +73,8 @@ class BattleShipStore {
 	playerReset = false;
 	@observable
 	opponentReset = false;
+	@observable playerPoint = 0;
+	@observable opponentPoint = 0;
 
 	constructor() {
 		if (this.socket !== null) {
@@ -273,6 +275,8 @@ class BattleShipStore {
 		this.opponentDestroyedShips = [];
 		this.prevTurn = '';
 		this.isGameOver = false;
+		this.playerPoint = 0;
+		this.opponentPoint = 0;
 		this.setPlayerReset(false);
 		push('/lobby');
 	}
@@ -311,6 +315,14 @@ class BattleShipStore {
 	@action.bound
 	declinedReset() {
 		this.socket.emit('DECLINED_RESET');
+	}
+	@action.bound
+	incrementPlayerPoint() {
+		this.playerPoint = this.playerPoint + 1;
+	}
+	@action.bound
+	incrementOpponentPoint() {
+		this.opponentPoint = this.opponentPoint + 1;
 	}
 }
 
