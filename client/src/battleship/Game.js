@@ -131,7 +131,8 @@ class Game extends React.Component {
 			askForReset,
 			resetGame,
 			setOpponentReset,
-			declinedReset
+			declinedReset,
+			roomName
 		} = this.props.battleship;
 		const { push } = this.props.history;
 		const { countDownTimer, rematchCount } = this.state;
@@ -318,8 +319,11 @@ class Game extends React.Component {
 							<button
 								className="button is-success"
 								onClick={() => {
-									askForReset();
-									// setIsGameOver(false);
+									if (opponentDestroyedShips.length > 15) {
+										askForReset(name,roomName);
+									} else {
+										askForReset();
+									}
 								}}
 							>
 								Rematch!

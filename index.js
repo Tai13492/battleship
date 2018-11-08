@@ -17,11 +17,12 @@ const enterRoom = (roomName, name) => {
   } else {
     const oldRoomIndex = rooms.findIndex(room => room.roomName === name);
     rooms[oldRoomIndex].players = [];
+    const players = [rooms[index].players[0], name];
     const randomPlayer = Math.round(Math.random());
-    const firstPlayer = randomPlayer === 0 ? rooms[index].players[0] : name;
+    const firstPlayer = randomPlayer === 0 ? players[0] : players[1];
     rooms[index] = {
       ...rooms[index],
-      players: [rooms[index].players[0], name],
+      players,
       firstPlayer
     };
   }
@@ -80,7 +81,14 @@ io.on("connection", socket => {
     }
     socket.leave(getRoomName(socket));
   });
-  socket.on("ASK_FOR_RESET", () => {
+  socket.on("ASK_FOR_RESET", (name, roomName) => {
+    if (name) {
+      rooms.forEach((room, idx) => {
+        if (roomName === room.roomName) {
+          rooms[idx].firstPlayer = name;
+        }
+      });
+    }
     socket.to(getRoomName(socket)).emit("OPPONENT_ASK_FOR_RESET");
   });
   socket.on("DECLINED_RESET", () => {

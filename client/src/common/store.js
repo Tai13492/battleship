@@ -296,9 +296,9 @@ class BattleShipStore {
 		push('/board');
 	}
 	@action.bound
-	askForReset() {
+	askForReset(name, roomName) {
 		this.setPlayerReset(true);
-		this.socket.emit('ASK_FOR_RESET');
+		this.socket.emit('ASK_FOR_RESET', name, roomName);
 	}
 	@action.bound
 	setPlayerReset(bool) {
