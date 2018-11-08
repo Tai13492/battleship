@@ -16,7 +16,7 @@ const enterRoom = (roomName, name) => {
     rooms.push({ roomName, players: [name] });
   } else {
     const oldRoomIndex = rooms.findIndex(room => room.roomName === name);
-    if (rooms[oldRoomIndex].players) {
+    if (oldRoomIndex !== -1) {
       rooms[oldRoomIndex].players = [];
     }
     const players = [rooms[index].players[0], name];
