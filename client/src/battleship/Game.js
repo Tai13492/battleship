@@ -4,13 +4,17 @@ import { inject, observer } from 'mobx-react';
 import BoardSquare from './components/BoardSquare';
 import OpponentBoardSquare from './components/OpponentBoardSquare';
 import explosion from '../common/assets/explosion.png';
+import hit from './assets/hitsound.mp3';
+import Sound from 'react-sound';
 
 @inject('battleship')
 @observer
 class Game extends React.Component {
 	state = {
 		countDownTimer: 10,
-		rematchCount: 0
+		rematchCount: 0,
+		hitSound: false,
+		missSound: false
 	};
 	componentDidMount() {
 		const { turn, name } = this.props.battleship;
@@ -81,7 +85,6 @@ class Game extends React.Component {
 			sendBoardToOpponent,
 			changeTurn
 		} = this.props.battleship;
-
 		return opponentSquares.map((opponentSquare, x) =>
 			opponentSquare.map((s, y) => {
 				const isEmpty = opponentSquares[x][y].ship === null;
@@ -93,6 +96,16 @@ class Game extends React.Component {
 					>
 						<OpponentBoardSquare
 							onClick={() => {
+								// if (!isEmpty && !isHit) {
+								// 	this.setState({ hitSound: true });
+								// 	setTimeout(
+								// 		() =>
+								// 			this.setState({
+								// 				hitSound: false
+								// 			}),
+								// 		200
+								// 	);
+								// }
 								if (turn === name) {
 									if (isHit) {
 										console.log('YOU CANNOT SHOOT HERE!');
@@ -140,11 +153,10 @@ class Game extends React.Component {
 			incrementOpponentPoint
 		} = this.props.battleship;
 		const { push } = this.props.history;
-		const { countDownTimer, rematchCount } = this.state;
+		const { countDownTimer, rematchCount, hitSound } = this.state;
 		if (playerReset && opponentReset) {
 			resetGame(push);
 		}
-		console.log(rematchCount);
 		return (
 			<div
 				style={{
@@ -156,6 +168,9 @@ class Game extends React.Component {
 					padding: 60
 				}}
 			>
+				{hitSound && (
+					<Sound url={hit} playStatus={Sound.status.PLAYING} />
+				)}
 				<div className="columns">
 					<div className="column">
 						<h1 className="title is-2 is-white">

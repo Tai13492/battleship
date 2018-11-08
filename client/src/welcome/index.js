@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import background from '../common/assets/first_page_bg.jpeg';
 import { inject, observer } from 'mobx-react';
+import battleship_logo from '../common/assets/battleship_logo.png';
 
 @inject('battleship')
 @observer
@@ -21,7 +22,15 @@ class Welcome extends Component {
 				}}
 			>
 				<div className="container">
-					<div className="columns">
+					<p className="has-text-centered">
+						<img
+							src={battleship_logo}
+							alt="logo"
+							style={{ width: '50%' }}
+						/>
+					</p>
+
+					<div className="columns" style={{ marginTop: 60 }}>
 						<div className="column is-8 is-offset-2">
 							<div className="field">
 								<div className="control">
