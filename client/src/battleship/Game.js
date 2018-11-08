@@ -4,8 +4,6 @@ import { inject, observer } from 'mobx-react';
 import BoardSquare from './components/BoardSquare';
 import OpponentBoardSquare from './components/OpponentBoardSquare';
 import explosion from '../common/assets/explosion.png';
-import hit from './assets/hitsound.mp3';
-import Sound from 'react-sound';
 
 @inject('battleship')
 @observer
@@ -150,10 +148,11 @@ class Game extends React.Component {
 			playerPoint,
 			opponentPoint,
 			incrementPlayerPoint,
-			incrementOpponentPoint
+			incrementOpponentPoint,
+			numberOfTurns
 		} = this.props.battleship;
 		const { push } = this.props.history;
-		const { countDownTimer, rematchCount, hitSound } = this.state;
+		const { countDownTimer, rematchCount } = this.state;
 		if (playerReset && opponentReset) {
 			resetGame(push);
 		}
@@ -168,9 +167,6 @@ class Game extends React.Component {
 					padding: 60
 				}}
 			>
-				{hitSound && (
-					<Sound url={hit} playStatus={Sound.status.PLAYING} />
-				)}
 				<div className="columns">
 					<div className="column">
 						<h1 className="title is-2 is-white">
@@ -197,6 +193,11 @@ class Game extends React.Component {
 						<h1 className="title is-3 is-white">
 							{name} <br />
 							Point: {playerPoint}
+						</h1>
+					</div>
+					<div className="column">
+						<h1 className="title is-3 is-white has-text-centered">
+							Turn: {numberOfTurns}
 						</h1>
 					</div>
 					<div className="column">
@@ -321,13 +322,6 @@ class Game extends React.Component {
 						className="modal-content"
 						style={{ backgroundColor: 'white' }}
 					>
-						<div className="modal-card">
-							<header className="modal-card-head">
-								<p className="modal-card-title has-text-centered">
-									It's GAME!
-								</p>
-							</header>
-						</div>
 						<section
 							className="modal-card-body"
 							style={{ padding: 24 }}

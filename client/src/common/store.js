@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import io from 'socket.io-client';
 
 import body_ship_2_vertical from '../battleship/assets/body_ship_2_vertical.png';
@@ -236,6 +236,7 @@ class BattleShipStore {
 		this.opponentSquares[x][y].isHit = true;
 		if (square.ship !== null) this.opponentDestroyedShips.push(square.ship);
 	}
+
 	@action.bound
 	sendBoardToOpponent() {
 		if (this.opponentDestroyedShips.length > 15) {
@@ -323,6 +324,23 @@ class BattleShipStore {
 	@action.bound
 	incrementOpponentPoint() {
 		this.opponentPoint = this.opponentPoint + 1;
+	}
+	@computed
+	get numberOfTurns() {
+		let count = 0;
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				if (this.squares[i][j].isHit) count++;
+			}
+		}
+		if (this.opponentSquares.length < 1) return count;
+		for (let m = 0; m < 8; m++) {
+			for (let n = 0; n < 8; n++) {
+				if (this.opponentSquares[m][n].isHit) count++;
+			}
+		}
+
+		return count;
 	}
 }
 
