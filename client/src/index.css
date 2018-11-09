@@ -42,3 +42,8 @@ body {
 .m-12 {
 	margin-bottom: 12px !important;
 }
+
+#song {
+	height: 0px;
+	width: 0px;
+}

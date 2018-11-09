@@ -12,7 +12,9 @@ class Game extends React.Component {
 		countDownTimer: 10,
 		rematchCount: 0,
 		hitSound: false,
-		missSound: false
+		missSound: false,
+		reveilMap: false,
+		reveilMapCount: 0
 	};
 	componentDidMount() {
 		const { turn, name } = this.props.battleship;
@@ -83,6 +85,41 @@ class Game extends React.Component {
 			sendBoardToOpponent,
 			changeTurn
 		} = this.props.battleship;
+		if (this.state.reveilMap) {
+			console.log('hello');
+			return opponentSquares.map((opponentSquare, x) =>
+				opponentSquare.map((s, y) => {
+					const isEmpty = opponentSquares[x][y].ship === null;
+					const { isHit } = opponentSquares[x][y];
+					return (
+						<div
+							key={'' + x + y}
+							style={{ width: '12.5%', height: '12.5%' }}
+						>
+							<BoardSquare
+								onClick={() => console.log(`x:${x},y:${y}`)}
+								isEmpty={isEmpty}
+								isWhite={isHit && isEmpty}
+							>
+								{isHit && !isEmpty ? (
+									<img src={explosion} alt="explosion" />
+								) : (
+									!isEmpty && (
+										<img
+											src={
+												opponentSquares[x][y].ship
+													.shipPart
+											}
+											alt="ship_part"
+										/>
+									)
+								)}
+							</BoardSquare>
+						</div>
+					);
+				})
+			);
+		}
 		return opponentSquares.map((opponentSquare, x) =>
 			opponentSquare.map((s, y) => {
 				const isEmpty = opponentSquares[x][y].ship === null;
@@ -94,16 +131,6 @@ class Game extends React.Component {
 					>
 						<OpponentBoardSquare
 							onClick={() => {
-								// if (!isEmpty && !isHit) {
-								// 	this.setState({ hitSound: true });
-								// 	setTimeout(
-								// 		() =>
-								// 			this.setState({
-								// 				hitSound: false
-								// 			}),
-								// 		200
-								// 	);
-								// }
 								if (turn === name) {
 									if (isHit) {
 										console.log('YOU CANNOT SHOOT HERE!');
@@ -249,6 +276,25 @@ class Game extends React.Component {
 						</div>
 					</div>
 				</div>
+				<p className="has-text-centered">
+					<button
+						className={`button is-warning ${this.state
+							.reveilMapCount > 0 && 'is-hidden'}`}
+						onClick={() => {
+							this.setState({
+								reveilMap: true,
+								reveilMapCount: 1
+							});
+							setTimeout(
+								() => this.setState({ reveilMap: false }),
+								250
+							);
+						}}
+						style={{ marginTop: 20 }}
+					>
+						Reveal map
+					</button>
+				</p>
 				<p className="has-text-centered">
 					<button
 						className={`button is-danger ${(rematchCount > 1 ||

@@ -2,12 +2,18 @@ import React from 'react';
 import background from '../common/assets/first_page_bg.jpeg';
 import { inject, observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
+import avatar1 from '../battleship/assets/avatar1.png';
+import avatar2 from '../battleship/assets/avatar2.png';
+import avatar3 from '../battleship/assets/avatar3.png';
+
+const avatars = [avatar1, avatar2, avatar3];
 
 @inject('battleship')
 @observer
 class Lobby extends React.Component {
 	state = {
-		showTutorial: false
+		showTutorial: false,
+		avatar: avatars[Math.floor(Math.random() * 2)]
 	};
 	componentDidMount() {
 		const { joinRoom, getRooms } = this.props.battleship;
@@ -72,6 +78,7 @@ class Lobby extends React.Component {
 								Welcome,
 								{name}
 							</h1>
+							<img src={this.state.avatar} alt="avatar" />
 							<h1
 								className="title is-2"
 								style={{ color: 'white' }}
