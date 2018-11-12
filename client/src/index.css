@@ -1,5 +1,49 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+
+.clickable {
+	background-color: #a9a9a9;
+}
+
+.clickable:hover {
+	background-color: green;
+}
+
+.clickable-opponent {
+	background-color: #a9a9a9;
+}
+
+.clickable-opponent:hover {
+	background-color: red;
+}
+
+.background-panel {
+	background-color: #545959;
+	padding: 16px;
+	height: 50vh;
+	display: flex;
+	overflow-y: auto;
+	flex-direction: column;
+}
+
+.box-list {
+	background-color: #a9e3f9;
+	padding: 12px;
+	border-radius: 4px;
+	margin-bottom: 12px;
+}
+
+.is-white {
+	color: white;
+}
+.m-12 {
+	margin-bottom: 12px !important;
+}
+
+#song {
+	height: 0px;
+	width: 0px;
 }
